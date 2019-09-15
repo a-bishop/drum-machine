@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import './select-menu.js';
 import './mute-button.js';
-import './solo-button.js';
 import './beat-row.js';
 import './arp-row.js'
 
@@ -41,7 +40,7 @@ class MainContent extends LitElement {
 
         .mainGrid {
             display: grid;
-            grid-template-columns: 120px 40px 40px 300px;
+            grid-template-columns: 120px 40px 300px;
             grid-row-gap: 5px;
         }
 
@@ -111,7 +110,6 @@ class MainContent extends LitElement {
         this.bassSeq = new Tone.Sequence(function (time, note) {
             bassDrum.triggerAttackRelease(note, '8n', time);
         }, [null, null, null, null, null, null, null, null], '8n').start();
-        this.bassSeq.isSoloed = false;
 
         // Snare setup
         this.snare = new Tone.Player({
@@ -121,14 +119,12 @@ class MainContent extends LitElement {
         this.snareSeq = new Tone.Sequence(function (time, note) {
             note.start(time + 0.03)
         }, [null, null, null, null, null, null, null, null], "8n").start();
-        this.snareSeq.isSoloed = false;
 
         // hiHat setup
         const hiHat = new Tone.NoiseSynth().toMaster();
         this.hiHatSeq = new Tone.Sequence(function (time, note) {
             hiHat.triggerAttackRelease(note, time);
         }, [null, null, null, null, null, null, null, null], "8n").start();
-        this.hiHatSeq.isSoloed = false;
 
         // Arpeggiator Setup
         console.log(arpMovement['randomWalk'])
@@ -137,7 +133,6 @@ class MainContent extends LitElement {
             synth.triggerAttackRelease(note, '32n', time);
         }, this.currScaleWithOctave, arpMovement.alternateUp).start();
         this.arpSeq.interval = '16n';
-        this.arpSeq.isSoloed = false;
 
         var comp = new Tone.Compressor(-30, 3);
         comp.toMaster();
@@ -164,17 +159,13 @@ class MainContent extends LitElement {
                 </select-menu>
                 <mute-button @toggle-row-muted="${this.handleToggleRowMuted}" select='bass-drum'>
                 </mute-button>
-                <solo-button @toggle-row-soloed="${this.handleToggleRowSoloed}" select='bass-drum'>
-                </solo-button>
                 <div class='row'>
-                        <beat-row class='beat-row' id='bass-drum' select='bass-drum' @beat-row-updated="${this.handleBassUpdate}" clearAll="${this.cleared}"></beat-row>
+                    <beat-row class='beat-row' id='bass-drum' select='bass-drum' @beat-row-updated="${this.handleBassUpdate}" clearAll="${this.cleared}"></beat-row>
                 </div>
                 <select-menu select='snare-drum'>
                  </select-menu>
                  <mute-button @toggle-row-muted="${this.handleToggleRowMuted}" select='snare-drum'>
                 </mute-button>
-                <solo-button @toggle-row-soloed="${this.handleToggleRowSoloed}" select='snare-drum'>
-                </solo-button>
                 <div class='row'>
                     <beat-row class='beat-row' id='snare-drum' select='snare-drum' @beat-row-updated="${this.handleSnareUpdate}" clearAll="${this.cleared}"></beat-row>
                 </div>
@@ -182,12 +173,9 @@ class MainContent extends LitElement {
                 </select-menu>
                 <mute-button @toggle-row-muted="${this.handleToggleRowMuted}" select='hi-hat'>
                 </mute-button>
-                <solo-button @toggle-row-soloed="${this.handleToggleRowSoloed}" select='hi-hat'>
-                </solo-button>
                 <div class='row'>
                     <beat-row class='beat-row' id='hi-hat' select='hi-hat' @beat-row-updated="${this.handleHiHatUpdate}" clearAll="${this.cleared}"></beat-row>
                 </div>
-                <div></div>
                 <div></div>
                 <div></div>
                 <div class='row'>
@@ -210,7 +198,6 @@ class MainContent extends LitElement {
                 </div>
                 <div></div>
                 <div></div>
-                <div></div>
                 <div class='buttonRow'>
                     <button id='start-button' @click="${this.startBeat}"> Play
                     </button >
@@ -218,7 +205,6 @@ class MainContent extends LitElement {
                     <button id='cancel-button' @click="${this.stopBeat}"> Stop </button>
                     <button id='clear-button' @click="${this.clear}"> Clear All </button>
                 </div>
-                <div></div>
                 <div></div>
                 <div></div>
                 <div class='row'>
@@ -231,7 +217,6 @@ class MainContent extends LitElement {
                         <input type="range" min="0" max="100" value="0" class="slider" name="swingSlider" id="swingSlider" @change="${this.updateSwing}" >
                     </div >
                 </div>
-                <div></div>
                 <div></div>
                 <div></div>
                 <div class=row>
@@ -251,8 +236,6 @@ class MainContent extends LitElement {
                 <div class=row>ARPEGGIATOR</div>
                 <mute-button @toggle-row-muted="${this.handleToggleRowMuted}" select='arpeggiator'>
                 </mute-button>
-                <solo-button @toggle-row-soloed="${this.handleToggleRowSoloed}" select='arpeggiator'>
-                </solo-button>
                 <div class='row'>
                     <arp-row class='arp-row' id='arp' select='arpeggiator' @arp-row-updated="${this.handleArpNoteUpdate}" clearAll="${this.cleared}" notes="${JSON.stringify(arpTonics)}"></arp-row>
                 </div>
@@ -322,30 +305,22 @@ class MainContent extends LitElement {
     handleToggleRowMuted(e) {
         switch (e.detail.selected) {
             case ('bass-drum'):
-                e.detail.muted ? this.bassSeq.mute = true : this.bassSeq.mute = false;
+                this.bassSeq.mute = e.detail.muted ? true : false;
                 break;
             case ('snare-drum'):
-                e.detail.muted ? this.snareSeq.mute = true : this.snareSeq.mute = false;
+                this.snareSeq.mute = e.detail.muted ? true : false;
                 break;
             case ('hi-hat'):
-                e.detail.muted ? this.hiHatSeq.mute = true : this.hiHatSeq.mute = false;
+                this.hiHatSeq.mute = e.detail.muted ? true : false;
                 break;
             case ('arpeggiator'):
-                e.detail.muted ? this.arpSeq.mute = true : this.arpSeq.mute = false;
+                this.arpSeq.mute = e.detail.muted ? true : false;
                 break;
         }
     }
 
     updateSequences(thisSeq, isSoloedEvent) {
-        let othersSoloed = false;
-        this.sequences.forEach(seq => {
-            if (seq !== thisSeq) {
-                (isSoloedEvent && !seq.isSoloed) ? seq.mute = true : seq.mute = false;
-                if (seq.isSoloed) othersSoloed = true;
-            }
-        })
-        isSoloedEvent ? thisSeq.isSoloed = true : thisSeq.isSoloed = false;
-        (!isSoloedEvent && othersSoloed) ? thisSeq.mute = true : thisSeq.mute = false;
+
     }
 
     handleToggleRowSoloed(e) {
