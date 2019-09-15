@@ -1,0 +1,19 @@
+{
+  "name": "lit-element-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lit-element.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "polymer serve --port 8000 | npm run watch",
+    "watch": "browser-sync start --proxy localhost:8000 --files \"src/**/*.*, index.html, *.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "lit-element": "^2.2.1",
+    "lodash": "^4.17.15",
+    "tone": "^13.8.25"
+  }
+}
