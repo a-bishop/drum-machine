@@ -10,10 +10,10 @@ const scales = {
 }
 
 const notes = {
-    0: 'A', 1: 'Bb', 2: 'B', 3: 'C', 4: 'Db', 5: 'D', 6: 'Eb', 7: 'F', 8: 'Gb', 9: 'G', 10: 'Ab'
+    0: 'A', 1: 'Bb', 2: 'B', 3: 'C', 4: 'Db', 5: 'D', 6: 'E', 7: 'Eb', 8: 'F', 9: 'Gb', 10: 'G', 11: 'Ab'
 }
 
-const arpTonics = ['G', 'D', 'A', 'E', 'Bb'];
+const arpTonics = ['G', 'D', 'A', 'B', 'F', 'C'];
 
 const arpMovement = {
     alternateUp: "alternateUp",
@@ -88,12 +88,12 @@ class MainContent extends LitElement {
         super();
 
         this.octave = 3;
-        this.noteIndex = 3
+        this.noteIndex = 9
         this.note = notes[this.noteIndex];
         this.scale = 'minor pentatonic';
         this.currScaleWithOctave = scales[this.scale].map(interval => {
             const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
-            if (interval > 10) {
+            if (interval > 11) {
                 return `${notes[newIndex]}${this.octave + 1}`
             }
             return `${notes[newIndex]}${this.octave}`;
@@ -274,21 +274,28 @@ class MainContent extends LitElement {
         }
     }
 
-    handleArpMovementUpdate(e) {
-        const arpMove = this.shadowRoot.getElementById("arpSelect").value;
-        this.arpSeq.pattern = arpMove;
-        this.update();
-    }
-
     updateArpSequence() {
         this.currScaleWithOctave = scales[this.scale].map(interval => {
             const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
-            if (interval > 10) {
+            if (interval > 11) {
                 return `${notes[newIndex]}${this.octave + 1}`
             }
             return `${notes[newIndex]}${this.octave}`;
         });
         this.arpSeq.values = this.currScaleWithOctave;
+    }
+
+    handleArpNoteUpdate(e) {
+        console.log(e.detail.note)
+        this.noteIndex = e.detail.note
+        this.note = notes[this.noteIndex];
+        // this.updateArpSequence();
+    }
+
+    handleArpMovementUpdate(e) {
+        const arpMove = this.shadowRoot.getElementById("arpSelect").value;
+        this.arpSeq.pattern = arpMove;
+        this.updateArpSequence();
     }
 
     handleArpScaleChange() {
@@ -317,10 +324,6 @@ class MainContent extends LitElement {
                 this.arpSeq.mute = e.detail.muted ? true : false;
                 break;
         }
-    }
-
-    updateSequences(thisSeq, isSoloedEvent) {
-
     }
 
     handleToggleRowSoloed(e) {

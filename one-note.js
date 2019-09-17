@@ -20,17 +20,22 @@ class OneNote extends LitElement {
             bgColor: { type: String },
             index: { type: Number },
             isLit: { type: Boolean },
-            note: { type: String }
+            note: { type: String },
+            active: { type: Number }
         }
     }
 
     constructor() {
         super();
-        this.bgColor = 'white';
         this.isLit = false;
     }
 
     render() {
+        if (this.index === this.active) {
+            this.bgColor = 'lightBlue';
+        } else {
+            this.bgColor = 'white';
+        }
         return html`
             <style>
                 .note {
@@ -63,8 +68,7 @@ class OneNote extends LitElement {
     }
 
     handleClick() {
-        const on = this.isLit ? true : false
-        if (!on) {
+        if (!this.isLit) {
             this.isLit = true;
             this.bgColor = 'lightBlue';
         } else {

@@ -60,8 +60,7 @@ class OneBeat extends LitElement {
     }
 
     handleClick() {
-        const on = this.isLit ? true : false
-        if (!on) {
+        if (!this.isLit) {
             this.isLit = true;
             this.bgColor = 'lightBlue';
         } else {
@@ -69,27 +68,6 @@ class OneBeat extends LitElement {
             this.bgColor = 'white';
         }
         this.beatUpdatedEvent();
-        // if (this.bgColor === 'lightBlue') {
-        //     switch (this.instrument) {
-        //         case 'bass-drum':
-        //             const bassDrum = new Tone.MembraneSynth().toMaster();
-        //             bassDrum.triggerAttackRelease("C2", "8n");
-        //             break;
-        //         case 'snare-drum':
-        //             new Tone.Player({
-        //                 "url": "./sounds/snare.wav",
-        //                 "autostart": true
-        //             }).toMaster();
-        //             break;
-        //         case 'hi-hat':
-        //             const hiHat = new Tone.NoiseSynth().toMaster();
-        //             hiHat.triggerAttackRelease("8n");
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        // }
-
     }
 }
 
