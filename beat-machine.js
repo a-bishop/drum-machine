@@ -2,27 +2,24 @@ import { LitElement, html, css } from 'lit-element';
 import './select-menu.js';
 import './mute-button.js';
 import './beat-row.js';
-import './arp-row.js'
+import './arp-row.js';
+import { notes } from './notes.js'
 
 const scales = {
     'minor pentatonic': [0, 3, 4, 6, 9, 11],
     'major': [0, 2, 4, 6, 8, 10],
 }
 
-const notes = {
-    0: 'A', 1: 'Bb', 2: 'B', 3: 'C', 4: 'Db', 5: 'D', 6: 'E', 7: 'Eb', 8: 'F', 9: 'Gb', 10: 'G', 11: 'Ab'
-}
-
-const arpTonics = ['G', 'D', 'A', 'B', 'F', 'C'];
+const arpTonics = [10, 5, 0, 6, 2, 9, 4];
 
 const arpMovement = {
-    alternateUp: "alternateUp",
-    randomWalk: "randomWalk",
-    up: "up",
-    down: "down",
     upDown: "upDown",
     downUp: "downUp",
+    up: "up",
+    down: "down",
+    alternateUp: "alternateUp",
     alternateDown: "alternateDown",
+    randomWalk: "randomWalk",
     random: "random",
     randomOnce: "randomOnce"
 }
@@ -131,7 +128,7 @@ class MainContent extends LitElement {
         const synth = new Tone.Synth().toMaster();
         this.arpSeq = new Tone.Pattern((time, note) => {
             synth.triggerAttackRelease(note, '32n', time);
-        }, this.currScaleWithOctave, arpMovement.alternateUp).start();
+        }, this.currScaleWithOctave, arpMovement.upDown).start();
         this.arpSeq.interval = '16n';
 
         var comp = new Tone.Compressor(-30, 3);
@@ -237,7 +234,7 @@ class MainContent extends LitElement {
                 <mute-button @toggle-row-muted="${this.handleToggleRowMuted}" select='arpeggiator'>
                 </mute-button>
                 <div class='row'>
-                    <arp-row class='arp-row' id='arp' select='arpeggiator' @arp-row-updated="${this.handleArpNoteUpdate}" clearAll="${this.cleared}" notes="${JSON.stringify(arpTonics)}"></arp-row>
+                    <arp-row class='arp-row' id='arp' select='arpeggiator' @arp-row-updated="${this.handleArpNoteUpdate}" clearAll="${this.cleared}" noteIndexes="${JSON.stringify(arpTonics)}"></arp-row>
                 </div>
             </div>
         </div >
@@ -286,10 +283,11 @@ class MainContent extends LitElement {
     }
 
     handleArpNoteUpdate(e) {
-        console.log(e.detail.note)
-        this.noteIndex = e.detail.note
+        console.log(e.detail.noteIndex);
+        this.noteIndex = e.detail.noteIndex;
         this.note = notes[this.noteIndex];
-        // this.updateArpSequence();
+        console.log(this.note)
+        this.updateArpSequence();
     }
 
     handleArpMovementUpdate(e) {

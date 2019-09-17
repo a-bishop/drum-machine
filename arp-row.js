@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import './select-menu.js';
 import './one-note.js';
+import { notes } from './notes';
 
 class ArpRow extends LitElement {
     static get styles() {
@@ -19,7 +20,7 @@ class ArpRow extends LitElement {
     static get properties() {
         return {
             cells: { type: Array },
-            notes: { type: Array },
+            noteIndexes: { type: Array },
             clearAll: { type: Boolean },
             activeNote: { type: Number }
         }
@@ -34,15 +35,15 @@ class ArpRow extends LitElement {
         return html`
         <div class=rowContainer>    
             <div class=arpRow>
-            ${this.notes.map((note, index) => html`<one-note @note-changed="${e => {
+            ${this.noteIndexes.map((noteIndex, index) => html`<one-note @note-changed="${e => {
             if (e.detail.newState) this.activeNote = e.detail.index
             let event = new CustomEvent('arp-row-updated', {
                 detail: {
-                    note: note
+                    noteIndex: noteIndex
                 }
             });
             this.dispatchEvent(event);
-        }}" class="beat" index=${index} active=${this.activeNote} clear=${this.clearAll} note="${this.notes[index]}">${this.notes[index]}</one-note>`)}
+        }}" class="beat" index=${index} active=${this.activeNote} clear=${this.clearAll} note="${notes[noteIndex]}">${notes[noteIndex]}</one-note>`)}
                 </div>
         </div>`
 
