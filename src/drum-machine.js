@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from '../node_modules/lit-element';
 import './select-menu.js';
 import './mute-button.js';
 import './beat-row.js';
