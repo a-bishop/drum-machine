@@ -1,14 +1,23 @@
 <html>
 
 <head>
-    <script type="module" src="./beat-machine.js"></script>
+    <script type="module" src="./drum-machine.js"></script>
     <script src="https://unpkg.com/tone@13.8.25/build/Tone.js">
     </script>
 </head>
-<main-content></main-content>
+<button>Click me to start the drum machine!</button>
 
-<!-- <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
-        href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
+<script>
+    const button = document.querySelector('button');
+    const drumMachine = document.createElement('drum-machine');
+
+    button.addEventListener('click', function () {
+        const context = new AudioContext();
+        context.resume();
+        button.parentNode.replaceChild(drumMachine, button);
+    });
+
+</script>
 </body>
 
 </html>

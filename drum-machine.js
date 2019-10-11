@@ -25,7 +25,7 @@ const arpMovement = {
     randomOnce: "randomOnce"
 }
 
-class MainContent extends LitElement {
+class DrumMachine extends LitElement {
     static get styles() {
         return css`
         host([hidden]) { display: none; }
@@ -429,4 +429,4 @@ class MainContent extends LitElement {
     }
 }
 
-customElements.define('main-content', MainContent);
+customElements.define('drum-machine', DrumMachine);
