@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js";
+import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js/lit-element.js";
 import './select-menu.js';
 import './one-beat.js';
 
@@ -35,7 +35,7 @@ class BeatRow extends LitElement {
 
   constructor() {
     super();
-    this.cells = Array.apply(null, Array(8)).map(function () {});
+    this.cells = Array.apply(null, Array(8)).map(function () { });
     this.notes = new Array(8).fill(null);
   }
 

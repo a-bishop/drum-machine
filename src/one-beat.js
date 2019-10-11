@@ -1,4 +1,4 @@
-import { LitElement, html, css } from '../node_modules/lit-element';
+import { LitElement, html, css } from '../node_modules/lit-element/lit-element.js';
 
 class OneBeat extends LitElement {
     static get styles() {

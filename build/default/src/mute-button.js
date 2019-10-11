@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js";
+import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js/lit-element.js";
 const state = {
   UNMUTED: {
     COLOR: 'white'

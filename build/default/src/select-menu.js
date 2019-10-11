@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js";
+import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js/lit-element.js";
 
 class SelectMenu extends LitElement {
   static get styles() {
