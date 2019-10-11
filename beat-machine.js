@@ -5,12 +5,13 @@ import './beat-row.js';
 import './arp-row.js';
 import { notes } from './notes.js'
 
+// notes of scale represent # of intervals from tonic
 const scales = {
     'minor pentatonic': [0, 3, 4, 6, 9, 11],
-    'major': [0, 2, 4, 6, 8, 10],
+    'major': [0, 2, 4, 5, 7, 9, 11],
 }
 
-const arpTonics = [10, 5, 0, 6, 2, 9, 4];
+const arpTonics = [0, 1, 2, 3, 4, 5, 6];
 
 const arpMovement = {
     upDown: "upDown",
@@ -85,13 +86,13 @@ class MainContent extends LitElement {
         super();
 
         this.octave = 3;
-        this.noteIndex = 9
+        this.noteIndex = 10;
         this.note = notes[this.noteIndex];
         this.scale = 'minor pentatonic';
         this.currScaleWithOctave = scales[this.scale].map(interval => {
             const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
             if (interval > 11) {
-                return `${notes[newIndex]}${this.octave + 1}`
+                return `${notes[newIndex]}` + (this.octave + 1);
             }
             return `${notes[newIndex]}${this.octave}`;
         });
@@ -109,27 +110,60 @@ class MainContent extends LitElement {
         }, [null, null, null, null, null, null, null, null], '8n').start();
 
         // Snare setup
-        this.snare = new Tone.Player({
-            "url": "./sounds/snare.wav",
-            "autostart": false
+        const snare = new Tone.NoiseSynth({
+            noise: {
+                type: 'brown',
+                playbackRate: 3,
+            },
+            envelope: {
+                attack: 0.001,
+                decay: 0.13,
+                sustain: 0,
+                release: 0.03,
+            },
         }).toMaster();
+
+        // new Tone.Player({
+        //     "url": "./sounds/snare.wav",
+        //     "autostart": false
+        // }).toMaster();
         this.snareSeq = new Tone.Sequence(function (time, note) {
-            note.start(time + 0.03)
+            snare.triggerAttackRelease(note, time);
         }, [null, null, null, null, null, null, null, null], "8n").start();
 
         // hiHat setup
-        const hiHat = new Tone.NoiseSynth().toMaster();
+        const hiHat = new Tone.NoiseSynth({
+            noise: {
+                type: 'pink'
+            }
+        }).toMaster();
         this.hiHatSeq = new Tone.Sequence(function (time, note) {
             hiHat.triggerAttackRelease(note, time);
         }, [null, null, null, null, null, null, null, null], "8n").start();
 
+        var autoFilter = new Tone.AutoFilter({
+            "frequency": "8m",
+            "min": 800,
+            "max": 15000
+        }).connect(Tone.Master);
+
+        //connect the noise
+        hiHat.connect(autoFilter);
+        //start the autofilter LFO
+        autoFilter.start()
+
         // Arpeggiator Setup
         console.log(arpMovement['randomWalk'])
-        const synth = new Tone.Synth().toMaster();
+        const synth = new Tone.FMSynth({
+            "oscillator": {
+                "type": "triangle"
+            }
+        }).toMaster();
         this.arpSeq = new Tone.Pattern((time, note) => {
             synth.triggerAttackRelease(note, '32n', time);
+            console.log(note)
         }, this.currScaleWithOctave, arpMovement.upDown).start();
-        this.arpSeq.interval = '16n';
+        this.arpSeq.interval = '8n';
 
         var comp = new Tone.Compressor(-30, 3);
         comp.toMaster();
@@ -254,7 +288,7 @@ class MainContent extends LitElement {
     handleSnareUpdate(e) {
         for (const [i, note] of e.detail.notes.entries()) {
             if (note) {
-                this.snareSeq.at(i, this.snare);
+                this.snareSeq.at(i, { 'time': i });
             } else {
                 this.snareSeq.remove(i);
             }
@@ -275,7 +309,7 @@ class MainContent extends LitElement {
         this.currScaleWithOctave = scales[this.scale].map(interval => {
             const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
             if (interval > 11) {
-                return `${notes[newIndex]}${this.octave + 1}`
+                return `${notes[newIndex]}` + (this.octave + 1)
             }
             return `${notes[newIndex]}${this.octave}`;
         });
@@ -283,14 +317,12 @@ class MainContent extends LitElement {
     }
 
     handleArpNoteUpdate(e) {
-        console.log(e.detail.noteIndex);
         this.noteIndex = e.detail.noteIndex;
         this.note = notes[this.noteIndex];
-        console.log(this.note)
         this.updateArpSequence();
     }
 
-    handleArpMovementUpdate(e) {
+    handleArpMovementUpdate() {
         const arpMove = this.shadowRoot.getElementById("arpSelect").value;
         this.arpSeq.pattern = arpMove;
         this.updateArpSequence();

@@ -19,23 +19,14 @@ class OneNote extends LitElement {
             clear: { type: Boolean },
             bgColor: { type: String },
             index: { type: Number },
-            isLit: { type: Boolean },
-            note: { type: String },
-            active: { type: Number }
         }
     }
 
     constructor() {
         super();
-        this.isLit = false;
     }
 
     render() {
-        if (this.index === this.active) {
-            this.bgColor = 'lightBlue';
-        } else {
-            this.bgColor = 'white';
-        }
         return html`
             <style>
                 .note {
@@ -48,33 +39,18 @@ class OneNote extends LitElement {
         `;
     }
 
-    updated(changedProperties) {
-        changedProperties.forEach((oldValue, propName) => {
-            if (propName === 'clear') {
-                this.bgColor = 'white';
-                this.isLit = false;
-                this.beatUpdatedEvent();
-            }
-        });
-    }
-
     beatUpdatedEvent() {
         this.dispatchEvent(new CustomEvent('note-changed', {
             detail: {
                 index: this.index,
-                newState: this.isLit
+                bgColor: this.bgColor
             }
         }))
     }
 
     handleClick() {
-        if (!this.isLit) {
-            this.isLit = true;
-            this.bgColor = 'lightBlue';
-        } else {
-            this.isLit = false;
-            this.bgColor = 'white';
-        }
+        const newColor = this.bgColor === 'lightBlue' ? 'white' : 'lightBlue';
+        this.bgColor = newColor;
         this.beatUpdatedEvent();
     }
 }

@@ -1,0 +1,11 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+@media only screen and (max-width: 900px) {
+    html, body {
+        width: 100vw;
+        height: 100vw;
+    }
+}
