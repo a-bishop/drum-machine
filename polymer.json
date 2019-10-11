@@ -1,0 +1,5 @@
+{
+    "entrypoint": "index.html",
+    "shell": "src/drum-machine.js",
+    "npm": true
+}

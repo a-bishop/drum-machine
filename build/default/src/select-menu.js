@@ -1,7 +1,6 @@
-import { LitElement, html, css } from './node_modules/lit-element';
+import { LitElement, html, css } from "../node_modules/lit-element/lit-element.js";
 
 class SelectMenu extends LitElement {
-
   static get styles() {
     return css`
     :host([hidden]) { display: none; }
@@ -9,12 +8,14 @@ class SelectMenu extends LitElement {
     select {
       width: 100px;
     }
-    `
+    `;
   }
 
   static get properties() {
     return {
-      select: { type: String },
+      select: {
+        type: String
+      }
     };
   }
 
@@ -30,6 +31,7 @@ class SelectMenu extends LitElement {
       </select>
     `;
   }
+
 }
 
 customElements.define('select-menu', SelectMenu);
