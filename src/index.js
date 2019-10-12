@@ -1,1 +1,1 @@
-import './drum-machine.js'
+import './drum-machine.js';
