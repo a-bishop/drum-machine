@@ -71,7 +71,7 @@ class BeatRow extends LitElement {
       if (propName === 'clearAll') {
         let beats = this.shadowRoot.querySelectorAll('.beat');
         for (let beat of beats) {
-          beat.clear = this.clearAll;
+          beat.clear = !beat.clear;
         }
       }
     });

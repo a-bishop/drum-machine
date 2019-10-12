@@ -37,7 +37,7 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : 0;
+    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
@@ -46,6 +46,16 @@ class ArpRow extends LitElement {
       });
       this.dispatchEvent(event);
     }
+    if (this.activeNote === null) this.stopArpSeq();
+  }
+
+  stopArpSeq() {
+    let event = new CustomEvent('arp-row-updated', {
+      detail: {
+        stopArpSeq: true
+      }
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
@@ -76,6 +86,7 @@ class ArpRow extends LitElement {
         let notes = this.shadowRoot.querySelectorAll('.note');
         for (let note of notes) {
           note.bgColor = 'white';
+          this.stopArpSeq();
         }
       }
     });

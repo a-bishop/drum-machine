@@ -2639,7 +2639,7 @@ class BeatRow extends LitElement {
       if (propName === 'clearAll') {
         let beats = this.shadowRoot.querySelectorAll('.beat');
         for (let beat of beats) {
-          beat.clear = this.clearAll;
+          beat.clear = !beat.clear;
         }
       }
     });
@@ -2759,7 +2759,7 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : 0;
+    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
@@ -2768,6 +2768,16 @@ class ArpRow extends LitElement {
       });
       this.dispatchEvent(event);
     }
+    if (this.activeNote === null) this.stopArpSeq();
+  }
+
+  stopArpSeq() {
+    let event = new CustomEvent('arp-row-updated', {
+      detail: {
+        stopArpSeq: true
+      }
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
@@ -2798,6 +2808,7 @@ class ArpRow extends LitElement {
         let notes = this.shadowRoot.querySelectorAll('.note');
         for (let note of notes) {
           note.bgColor = 'white';
+          this.stopArpSeq();
         }
       }
     });
@@ -2822,13 +2833,10 @@ const scales = {
 const arpMovement = {
   upDown: 'upDown',
   downUp: 'downUp',
-  up: 'up',
-  down: 'down',
   alternateUp: 'alternateUp',
   alternateDown: 'alternateDown',
   randomWalk: 'randomWalk',
-  random: 'random',
-  randomOnce: 'randomOnce'
+  random: 'random'
 };
 
 class DrumMachine extends LitElement {
@@ -2999,7 +3007,7 @@ class DrumMachine extends LitElement {
 
     this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
 
-    this.cleared = 'false';
+    this.cleared = false;
   }
 
   render() {
@@ -3204,6 +3212,10 @@ class DrumMachine extends LitElement {
   }
 
   handleArpNoteUpdate(e) {
+    if (e.detail.stopArpSeq) {
+      this.arpSeq.stop();
+      return;
+    } else if (this.arpSeq.state === 'stopped') this.arpSeq.start(0);
     this.noteIndex = e.detail.noteIndex;
     this.note = notes[this.noteIndex];
     this.updateArpSequence();
@@ -3294,17 +3306,20 @@ class DrumMachine extends LitElement {
     Tone.Transport.stop();
     this.activeBeat = 'beatIndex0';
     this.removeTransportBeatStyle();
+    console.log(this.cleared);
   }
 
   clear() {
-    Tone.Transport.stop();
-    this.removeTransportBeatStyle();
-    this.cleared = !this.cleared;
-    const beatRows = this.shadowRoot.querySelectorAll('.beat-row');
-    const arpRow = this.shadowRoot.querySelector('.arp-row');
-    arpRow.clearAll = this.cleared;
-    for (let beatRow of beatRows) {
-      beatRow.clearAll = this.cleared;
+    for (let i = 0; i < 2; i++) {
+      Tone.Transport.stop();
+      this.removeTransportBeatStyle();
+      this.cleared = !this.cleared;
+      const beatRows = this.shadowRoot.querySelectorAll('.beat-row');
+      const arpRow = this.shadowRoot.querySelector('.arp-row');
+      arpRow.clearAll = this.cleared;
+      for (let beatRow of beatRows) {
+        beatRow.clearAll = this.cleared;
+      }
     }
   }
 
