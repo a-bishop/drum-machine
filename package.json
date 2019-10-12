@@ -14,6 +14,6 @@
     "browser-sync": "^2.26.7",
     "lit-element": "^2.2.1",
     "lodash": "^4.17.15",
-    "tone": "^13.8.25"
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

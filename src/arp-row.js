@@ -1,7 +1,7 @@
-import { LitElement, html, css } from '../node_modules/lit-element/lit-element.js';
+import { LitElement, html, css } from 'lit-element';
 import './select-menu.js';
 import './one-note.js';
-import { notes } from './notes';
+import { notes } from './notes.js';
 
 class ArpRow extends LitElement {
     static get styles() {
