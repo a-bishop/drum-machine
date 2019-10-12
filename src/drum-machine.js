@@ -207,8 +207,7 @@ class DrumMachine extends LitElement {
       </style>
       <div class="mainContainer">
         <div class="mainGrid">
-          <select-menu select=${JSON.stringify(['bass-drum', 'tom'])}>
-          </select-menu>
+          <select-menu select=${JSON.stringify(['bass-drum'])}> </select-menu>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="bass-drum"
@@ -223,8 +222,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
-          <select-menu select=${JSON.stringify(['snare-tight', 'snare-loose'])}>
-          </select-menu>
+          <select-menu select=${JSON.stringify(['snare-drum'])}> </select-menu>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="snare-drum"
@@ -239,10 +237,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
-          <select-menu
-            select="${JSON.stringify(['hi-hat-closed', 'hi-hat-open'])}"
-          >
-          </select-menu>
+          <select-menu select="${JSON.stringify(['hi-hat'])}"> </select-menu>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="hi-hat"
