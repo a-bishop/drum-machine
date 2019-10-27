@@ -1,4 +1,22 @@
-html,
+@font-face {
+  font-family: 'arcade';
+  src: url('./fonts/arcadeclassic-webfont.woff') format('woff'),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url('./fonts/acradeclassic.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}
+
+html {
+  font: 'arcade';
+  font-family: 'arcade';
+}
+
 body {
-  height: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+h2,
+option {
+  text-align: center;
+  font-size: 2rem;
 }

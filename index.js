@@ -2440,12 +2440,19 @@ class MuteButton extends LitElement {
       :host {
         display: block;
       }
+
+      button {
+        font-family: 'arcade';
+        font-size: 16px;
+      }
+
       .main {
         width: 30px;
         text-align: center;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
           0 3px 10px 0 rgba(0, 0, 0, 0.2);
       }
+
       .main:active {
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2),
           0 2px 5px 0 rgba(0, 0, 0, 0.2);
@@ -2856,9 +2863,30 @@ class DrumMachine extends LitElement {
         justify-self: center;
       }
 
+      button {
+        font-family: 'arcade';
+        font-size: 16px;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 4px;
+        background-color: lightGray;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+          0 2px 5px 0 rgba(0, 0, 0, 0.2);
+        transform: translate(1px, 1px);
+      }
+
+      button:active {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+          0 3px 10px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      .text {
+        font-size: 16px;
+      }
+
       .mainGrid {
         display: grid;
-        grid-template-columns: 120px 40px 300px;
+        grid-template-columns: 110px 50px 300px;
         grid-row-gap: 5px;
       }
 
@@ -2866,6 +2894,10 @@ class DrumMachine extends LitElement {
         display: flex;
         align-items: center;
         justify-content: space-around;
+      }
+
+      .instrumentText {
+        justify-self: center;
       }
 
       .buttonRow {
@@ -2885,6 +2917,10 @@ class DrumMachine extends LitElement {
 
       .slideContainer {
         margin: 5px;
+      }
+
+      .arpText .arpMute {
+        margin-top: 10px;
       }
 
       @media only screen and (max-width: 600px) {
@@ -3020,7 +3056,7 @@ class DrumMachine extends LitElement {
       </style>
       <div class="mainContainer">
         <div class="mainGrid">
-          <select-menu select=${JSON.stringify(['bass-drum'])}> </select-menu>
+          <p class="instrumentText">bass drum</p>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="bass-drum"
@@ -3035,7 +3071,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
-          <select-menu select=${JSON.stringify(['snare-drum'])}> </select-menu>
+          <p class="instrumentText">snare drum</p>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="snare-drum"
@@ -3050,7 +3086,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
-          <select-menu select="${JSON.stringify(['hi-hat'])}"> </select-menu>
+          <p class="instrumentText">hi-hat</p>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="hi-hat"
@@ -3080,16 +3116,18 @@ class DrumMachine extends LitElement {
           <div></div>
           <div></div>
           <div class="buttonRow">
-            <button id="start-button" @click="${this.startBeat}">Play</button>
+            <button id="start-button" @click="${this.startBeat}">
+              Play
+            </button>
             <button id="stop-button" @click="${this.pauseBeat}">Pause</button>
             <button id="cancel-button" @click="${this.stopBeat}">Stop</button>
-            <button id="clear-button" @click="${this.clear}">Clear All</button>
+            <button id="clear-button" @click="${this.clear}">Clear</button>
           </div>
           <div></div>
           <div></div>
           <div class="row">
             <div class="slideContainer">
-              <label for="bpmSlider"
+              <label for="bpmSlider" class="text"
                 >BPM ${Math.floor(Tone.Transport.bpm.value)}</label
               >
               <input
@@ -3143,13 +3181,14 @@ class DrumMachine extends LitElement {
               <option>5</option>
             </select>
           </div>
-          <div class="row">ARPEGGIATOR</div>
+          <div class="row text arpText">ARPEGGIATOR</div>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="arpeggiator"
+            class="arpMute"
           >
           </mute-button>
-          <div class="row">
+          <div class="row arpContainer">
             <arp-row
               class="arp-row"
               id="arp"
