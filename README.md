@@ -1,5 +1,5 @@
 ### Tone.js Drum Machine
 
-(Work in progress 🏗)
+Drum machine and arpeggiator built with web components and the Tone.js library.
 
-Play some jams [here](https://andrewnbishop.com/drum-machine/)!
+https://andrewnbishop.com/drum-machine/
