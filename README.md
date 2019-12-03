@@ -2,6 +2,4 @@
 
 Drum machine and arpeggiator built with web components and the Tone.js library.
 
-Play some jams!
-
-https://andrewnbishop.com/drum-machine/
+Play some jams! [Demo](https://andrewnbishop.com/drum-machine/)
