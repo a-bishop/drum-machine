@@ -13,7 +13,6 @@ const scales = {
   'harmonic minor': [0, 2, 3, 5, 7, 8, 11],
   blues: [0, 3, 5, 6, 7, 10],
   arabic: [0, 1, 4, 5, 7, 8, 11],
-  'whole tone': [0, 2, 4, 6, 8, 10],
   'hungarian roma': [0, 2, 3, 6, 7, 8, 11]
 };
 
@@ -29,9 +28,6 @@ const arpMovement = {
 class DrumMachine extends LitElement {
   static get styles() {
     return css`
-      host([hidden]) {
-        display: none;
-      }
       :host {
         display: block;
       }
@@ -76,6 +72,20 @@ class DrumMachine extends LitElement {
         justify-content: space-around;
       }
 
+      .slide-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+      }
+
+      .grid-row {
+        display: grid;
+        grid-template-columns: 2fr 2fr 0.5fr;
+        justify-items: center;
+        grid-row-gap: 5px;
+        margin-top: 0.6em;
+      }
+
       .instrumentText {
         justify-self: center;
       }
@@ -97,10 +107,6 @@ class DrumMachine extends LitElement {
 
       .slideContainer {
         margin: 5px;
-      }
-
-      .arpText .arpMute {
-        margin-top: 10px;
       }
 
       @media only screen and (max-width: 600px) {
@@ -305,16 +311,16 @@ class DrumMachine extends LitElement {
           </div>
           <div></div>
           <div></div>
-          <div class="row">
+          <div class="slide-row">
             <div class="slideContainer">
               <label for="bpmSlider" class="text"
                 >BPM ${Math.floor(Tone.Transport.bpm.value)}</label
               >
               <input
                 type="range"
-                min="1"
-                max="250"
-                value="80 "
+                min="60"
+                max="200"
+                value=${Math.floor(Tone.Transport.bpm.value)}
                 class="slider"
                 name="bpmSlider"
                 id="bpmSlider"
@@ -326,7 +332,7 @@ class DrumMachine extends LitElement {
               <input
                 type="range"
                 min="0"
-                max="100"
+                max="70"
                 value="0"
                 class="slider"
                 name="swingSlider"
@@ -335,37 +341,10 @@ class DrumMachine extends LitElement {
               />
             </div>
           </div>
-          <div></div>
-          <div></div>
-          <div class="row">
-            <select id="arpSelect" @change=${this.handleArpMovementUpdate}>
-              ${Object.keys(arpMovement).map(
-                pattern =>
-                  html`
-                    <option>${pattern}</option>
-                  `
-              )}
-            </select>
-            <select id="arpScale" @change=${this.handleArpScaleChange}>
-              ${Object.keys(scales).map(
-                scale =>
-                  html`
-                    <option>${scale}</option>
-                  `
-              )}
-            </select>
-            <select id="arpOctave" @change=${this.handleArpOctaveChange}>
-              <option>2</option>
-              <option selected>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
-          <div class="row text arpText">ARPEGGIATOR</div>
+          <p class="instrumentText">ARPEGGIATOR</p>
           <mute-button
             @toggle-row-muted="${this.handleToggleRowMuted}"
             select="arpeggiator"
-            class="arpMute"
           >
           </mute-button>
           <div class="row arpContainer">
@@ -377,6 +356,35 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
               noteIndexes="${JSON.stringify(arpTonics)}"
             ></arp-row>
+          </div>
+          <div></div>
+          <div></div>
+          <div class="grid-row">
+            <div>Scale</div>
+            <div>Sequence</div>
+            <div>Octave</div>
+            <select id="arpScale" @change=${this.handleArpScaleChange}>
+              ${Object.keys(scales).map(
+                scale =>
+                  html`
+                    <option>${scale}</option>
+                  `
+              )}
+            </select>
+            <select id="arpSelect" @change=${this.handleArpMovementUpdate}>
+              ${Object.keys(arpMovement).map(
+                pattern =>
+                  html`
+                    <option>${pattern}</option>
+                  `
+              )}
+            </select>
+            <select id="arpOctave" @change=${this.handleArpOctaveChange}>
+              <option>2</option>
+              <option selected>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
           </div>
         </div>
       </div>

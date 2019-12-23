@@ -27,13 +27,12 @@ class MuteButton extends LitElement {
       .main {
         width: 30px;
         text-align: center;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-          0 3px 10px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2),
+          0 1px 5px 0 rgba(0, 0, 0, 0.2);
       }
 
       .main:active {
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2),
-          0 2px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
         transform: translate(1px, 1px);
       }
     `;

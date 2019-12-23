@@ -9,7 +9,8 @@ class OneNote extends LitElement {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px dashed gainsboro;
+        border: 1px solid darkgrey;
+        cursor: pointer;
       }
     `;
   }

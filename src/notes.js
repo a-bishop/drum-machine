@@ -14,6 +14,6 @@ const notes = {
 };
 
 // Corresponds to the circle of fifths from G
-const arpTonics = [7, 2, 9, 4, 11, 6, 1];
+const arpTonics = [7, 2, 9, 4];
 
 export { notes, arpTonics };

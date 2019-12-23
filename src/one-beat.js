@@ -7,6 +7,7 @@ class OneBeat extends LitElement {
         width: 30px;
         height: 30px;
         border: 1px solid black;
+        cursor: pointer;
       }
     `;
   }
