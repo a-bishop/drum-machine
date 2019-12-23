@@ -1,5 +1,5 @@
 ### Tone.js Drum Machine
 
-(Work in progress 🏗)
+Drum machine and arpeggiator built with Polymer's [lit-element](https://lit-element.polymer-project.org/) Web Components and the Tone.js library.
 
-Play some jams [here](https://andrewnbishop.com/drum-machine/)!
+[Play some jams](https://andrewnbishop.com/drum-machine/)
