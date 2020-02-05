@@ -159,10 +159,6 @@ class DrumMachine extends LitElement {
     const snare = new Tone.NoiseSynth({
       noise: {
         type: 'brown'
-      },
-      envelope: {
-        attack: 0.005,
-        decay: 0.1
       }
     });
     const tom = new Tone.MembraneSynth();
@@ -174,7 +170,7 @@ class DrumMachine extends LitElement {
 
     this.snareSeq = new Tone.Sequence(
       function(time, note) {
-        snare.triggerAttackRelease(time);
+        snare.triggerAttackRelease(note, time);
         tom.triggerAttackRelease(time);
       },
       [null, null, null, null, null, null, null, null],
