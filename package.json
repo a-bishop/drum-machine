@@ -5,8 +5,8 @@
   "main": "lit-element.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "polymer serve --port 8000 | npm run watch",
-    "watch": "browser-sync start --proxy localhost:8000 --files \"src/**/*.*, index.html, *.js\""
+    "dev": "polymer serve | npm run watch",
+    "watch": "browser-sync start --proxy localhost:8081 --files \"src/**/*.*, index.html, *.js\""
   },
   "author": "",
   "license": "ISC",

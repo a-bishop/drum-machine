@@ -138,7 +138,6 @@ class DrumMachine extends LitElement {
       }
       return `${notes[newIndex]}${this.octave}`;
     });
-    console.log(this.scale, this.currScaleWithOctave);
 
     this.transportBeatStyle = {
       background: 'white',
@@ -159,20 +158,24 @@ class DrumMachine extends LitElement {
     // Snare setup
     const snare = new Tone.NoiseSynth({
       noise: {
-        type: 'brown',
-        playbackRate: 3
+        type: 'brown'
       },
       envelope: {
-        attack: 0.001,
-        decay: 0.13,
-        sustain: 0,
-        release: 0.03
+        attack: 0.005,
+        decay: 0.1
       }
-    }).toMaster();
+    });
+    const tom = new Tone.MembraneSynth();
+    const compressor = new Tone.MidSideCompressor();
+    const gain = new Tone.Gain();
+    snare.chain(compressor, gain);
+    tom.chain(compressor, gain);
+    gain.chain(Tone.Master);
 
     this.snareSeq = new Tone.Sequence(
       function(time, note) {
-        snare.triggerAttackRelease(note, time);
+        snare.triggerAttackRelease(time);
+        tom.triggerAttackRelease(time);
       },
       [null, null, null, null, null, null, null, null],
       '8n'
@@ -183,7 +186,10 @@ class DrumMachine extends LitElement {
       noise: {
         type: 'pink'
       }
-    }).toMaster();
+    });
+    var filter = new Tone.Filter(800, 'bandpass');
+    hiHat.chain(filter, compressor, Tone.Master);
+
     this.hiHatSeq = new Tone.Sequence(
       function(time, note) {
         hiHat.triggerAttackRelease(note, time);
@@ -205,7 +211,6 @@ class DrumMachine extends LitElement {
     autoFilter.start();
 
     // Arpeggiator Setup
-    console.log(arpMovement['randomWalk']);
     const synth = new Tone.FMSynth({
       oscillator: {
         type: 'triangle'
@@ -430,7 +435,6 @@ class DrumMachine extends LitElement {
       return `${notes[newIndex]}${this.octave}`;
     });
     this.arpSeq.values = this.currScaleWithOctave;
-    console.log(this.scale, this.currScaleWithOctave);
   }
 
   handleArpNoteUpdate(e) {
@@ -528,7 +532,6 @@ class DrumMachine extends LitElement {
     Tone.Transport.stop();
     this.activeBeat = 'beatIndex0';
     this.removeTransportBeatStyle();
-    console.log(this.cleared);
   }
 
   clear() {
