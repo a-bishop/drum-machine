@@ -1,17 +1,13 @@
-import { LitElement, html, css } from 'lit-element';
-
-const state = {
-  UNMUTED: {
-    COLOR: 'white'
-  },
-  MUTED: {
-    COLOR: 'lightBlue'
-  }
-};
+import {
+  LitElement,
+  html,
+  css
+} from 'lit-element';
+import colors from './colors';
 
 class MuteButton extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -40,18 +36,22 @@ class MuteButton extends LitElement {
 
   static get properties() {
     return {
-      select: { type: String },
-      bgColor: { type: String }
+      select: {
+        type: String
+      },
+      bgColor: {
+        type: String
+      }
     };
   }
 
   constructor() {
     super();
-    this.bgColor = state.UNMUTED.COLOR;
+    this.bgColor = colors.inactive;
   }
 
   render() {
-    return html`
+    return html `
       <style>
         .main {
           background: ${this.bgColor};
@@ -63,15 +63,15 @@ class MuteButton extends LitElement {
 
   handleClick() {
     const newColor =
-      this.bgColor === state.MUTED.COLOR
-        ? state.UNMUTED.COLOR
-        : state.MUTED.COLOR;
+      this.bgColor === colors.inactive ?
+      colors.active :
+      colors.inactive;
     this.bgColor = newColor;
     this.dispatchEvent(
       new CustomEvent('toggle-row-muted', {
         detail: {
           selected: this.select,
-          muted: this.bgColor === state.MUTED.COLOR
+          muted: this.bgColor === colors.active
         }
       })
     );

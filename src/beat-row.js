@@ -1,10 +1,14 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement,
+  html,
+  css
+} from 'lit-element';
 import './select-menu.js';
 import './one-beat.js';
 
 class BeatRow extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -23,21 +27,29 @@ class BeatRow extends LitElement {
 
   static get properties() {
     return {
-      clearAll: { type: Boolean },
-      cells: { type: Array },
-      instrument: { type: String },
-      notes: { type: Array }
+      clearAll: {
+        type: Boolean
+      },
+      cells: {
+        type: Array
+      },
+      instrument: {
+        type: String
+      },
+      notes: {
+        type: Array
+      }
     };
   }
 
   constructor() {
     super();
-    this.cells = Array.apply(null, Array(8)).map(function() {});
+    this.cells = Array.apply(null, Array(8)).map(function () {});
     this.notes = new Array(8).fill(null);
   }
 
   render() {
-    return html`
+    return html `
       <div class="rowContainer">
         <div class="beatRow">
           ${this.cells.map(
@@ -45,7 +57,7 @@ class BeatRow extends LitElement {
               html`
                 <one-beat
                   @beat-updated="${e => {
-                    this.notes.splice(e.detail.index, 1, e.detail.newState);
+                    this.notes.splice(e.detail.index, 1, e.detail.isActive);
                     let event = new CustomEvent('beat-row-updated', {
                       detail: {
                         instrument: this.instrument,

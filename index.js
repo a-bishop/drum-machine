@@ -2422,18 +2422,14 @@ class SelectMenu extends LitElement {
 
 customElements.define('select-menu', SelectMenu);
 
-const state = {
-  UNMUTED: {
-    COLOR: 'white'
-  },
-  MUTED: {
-    COLOR: 'lightBlue'
-  }
+const colors = {
+    active: 'lightBlue',
+    inactive: 'white',
 };
 
 class MuteButton extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -2462,18 +2458,22 @@ class MuteButton extends LitElement {
 
   static get properties() {
     return {
-      select: { type: String },
-      bgColor: { type: String }
+      select: {
+        type: String
+      },
+      bgColor: {
+        type: String
+      }
     };
   }
 
   constructor() {
     super();
-    this.bgColor = state.UNMUTED.COLOR;
+    this.bgColor = colors.inactive;
   }
 
   render() {
-    return html`
+    return html `
       <style>
         .main {
           background: ${this.bgColor};
@@ -2485,15 +2485,15 @@ class MuteButton extends LitElement {
 
   handleClick() {
     const newColor =
-      this.bgColor === state.MUTED.COLOR
-        ? state.UNMUTED.COLOR
-        : state.MUTED.COLOR;
+      this.bgColor === colors.inactive ?
+      colors.active :
+      colors.inactive;
     this.bgColor = newColor;
     this.dispatchEvent(
       new CustomEvent('toggle-row-muted', {
         detail: {
           selected: this.select,
-          muted: this.bgColor === state.MUTED.COLOR
+          muted: this.bgColor === colors.active
         }
       })
     );
@@ -2504,7 +2504,7 @@ customElements.define('mute-button', MuteButton);
 
 class OneBeat extends LitElement {
   static get styles() {
-    return css`
+    return css `
       .beat {
         width: 30px;
         height: 30px;
@@ -2516,22 +2516,28 @@ class OneBeat extends LitElement {
 
   static get properties() {
     return {
-      clear: { type: Boolean },
-      bgColor: { type: String },
-      instrument: { type: String },
-      index: { type: Number },
-      isLit: { type: Boolean }
+      clear: {
+        type: Boolean
+      },
+      bgColor: {
+        type: String
+      },
+      instrument: {
+        type: String
+      },
+      index: {
+        type: Number
+      },
     };
   }
 
   constructor() {
     super();
-    this.bgColor = 'white';
-    this.isLit = false;
+    this.bgColor = colors.inactive;
   }
 
   render() {
-    return html`
+    return html `
       <style>
         .beat {
           background: ${this.bgColor};
@@ -2544,8 +2550,7 @@ class OneBeat extends LitElement {
   updated(changedProperties) {
     changedProperties.forEach((oldValue, propName) => {
       if (propName === 'clear') {
-        this.bgColor = 'white';
-        this.isLit = false;
+        this.bgColor = colors.inactive;
         this.beatUpdatedEvent();
       }
     });
@@ -2557,20 +2562,15 @@ class OneBeat extends LitElement {
         detail: {
           instrument: this.instrument,
           index: this.index,
-          newState: this.isLit
+          isActive: this.bgColor === colors.active
         }
       })
     );
   }
 
   handleClick() {
-    if (!this.isLit) {
-      this.isLit = true;
-      this.bgColor = 'lightBlue';
-    } else {
-      this.isLit = false;
-      this.bgColor = 'white';
-    }
+    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    this.bgColor = newColor;
     this.beatUpdatedEvent();
   }
 }
@@ -2579,7 +2579,7 @@ customElements.define('one-beat', OneBeat);
 
 class BeatRow extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -2598,21 +2598,29 @@ class BeatRow extends LitElement {
 
   static get properties() {
     return {
-      clearAll: { type: Boolean },
-      cells: { type: Array },
-      instrument: { type: String },
-      notes: { type: Array }
+      clearAll: {
+        type: Boolean
+      },
+      cells: {
+        type: Array
+      },
+      instrument: {
+        type: String
+      },
+      notes: {
+        type: Array
+      }
     };
   }
 
   constructor() {
     super();
-    this.cells = Array.apply(null, Array(8)).map(function() {});
+    this.cells = Array.apply(null, Array(8)).map(function () {});
     this.notes = new Array(8).fill(null);
   }
 
   render() {
-    return html`
+    return html `
       <div class="rowContainer">
         <div class="beatRow">
           ${this.cells.map(
@@ -2620,7 +2628,7 @@ class BeatRow extends LitElement {
               html`
                 <one-beat
                   @beat-updated="${e => {
-                    this.notes.splice(e.detail.index, 1, e.detail.newState);
+                    this.notes.splice(e.detail.index, 1, e.detail.isActive);
                     let event = new CustomEvent('beat-row-updated', {
                       detail: {
                         instrument: this.instrument,
@@ -2657,7 +2665,7 @@ customElements.define('beat-row', BeatRow);
 
 class OneNote extends LitElement {
   static get styles() {
-    return css`
+    return css `
       .note {
         width: 30px;
         height: 30px;
@@ -2672,9 +2680,15 @@ class OneNote extends LitElement {
 
   static get properties() {
     return {
-      clear: { type: Boolean },
-      bgColor: { type: String },
-      index: { type: Number }
+      clear: {
+        type: Boolean
+      },
+      bgColor: {
+        type: String
+      },
+      index: {
+        type: Number
+      }
     };
   }
 
@@ -2683,7 +2697,7 @@ class OneNote extends LitElement {
   }
 
   render() {
-    return html`
+    return html `
       <style>
         .note {
           background: ${this.bgColor};
@@ -2707,7 +2721,7 @@ class OneNote extends LitElement {
   }
 
   handleClick() {
-    const newColor = this.bgColor === 'lightBlue' ? 'white' : 'lightBlue';
+    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
     this.bgColor = newColor;
     this.beatUpdatedEvent();
   }
@@ -2735,7 +2749,7 @@ const arpTonics = [7, 2, 9, 4];
 
 class ArpRow extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -2754,10 +2768,18 @@ class ArpRow extends LitElement {
 
   static get properties() {
     return {
-      cells: { type: Array },
-      noteIndexes: { type: Array },
-      clearAll: { type: Boolean },
-      activeNote: { type: Number }
+      cells: {
+        type: Array
+      },
+      noteIndexes: {
+        type: Array
+      },
+      clearAll: {
+        type: Boolean
+      },
+      activeNote: {
+        type: Number
+      }
     };
   }
 
@@ -2767,7 +2789,7 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : null;
+    this.activeNote = e.detail.bgColor === colors.active ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
@@ -2789,12 +2811,12 @@ class ArpRow extends LitElement {
   }
 
   render() {
-    return html`
+    return html `
       <div class="rowContainer">
         <div class="arpRow">
           ${this.noteIndexes.map(noteIndex => {
             const bgColor =
-              this.activeNote === noteIndex ? 'lightBlue' : 'white';
+              this.activeNote === noteIndex ? colors.active : colors.inactive;
             return html`
               <one-note
                 @note-changed=${this.updateActiveNote}
@@ -2815,7 +2837,7 @@ class ArpRow extends LitElement {
       if (propName === 'clearAll' && oldValue !== undefined) {
         let notes = this.shadowRoot.querySelectorAll('.note');
         for (let note of notes) {
-          note.bgColor = 'white';
+          note.bgColor = colors.inactive;
           this.stopArpSeq();
         }
       }
@@ -2848,7 +2870,7 @@ const arpMovement = {
 
 class DrumMachine extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host {
         display: block;
       }
@@ -2940,8 +2962,12 @@ class DrumMachine extends LitElement {
 
   static get properties() {
     return {
-      activeBeat: { type: String },
-      sequences: { type: Array }
+      activeBeat: {
+        type: String
+      },
+      sequences: {
+        type: Array
+      }
     };
   }
 
@@ -2952,13 +2978,6 @@ class DrumMachine extends LitElement {
     this.noteIndex = arpTonics[0];
     this.note = notes[this.noteIndex];
     this.scale = Object.keys(scales)[0];
-    this.currScaleWithOctave = scales[this.scale].map(interval => {
-      const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
-      if (interval > 11) {
-        return `${notes[newIndex]}` + (this.octave + 1);
-      }
-      return `${notes[newIndex]}${this.octave}`;
-    });
 
     this.transportBeatStyle = {
       background: 'white',
@@ -2969,7 +2988,7 @@ class DrumMachine extends LitElement {
     // Bass setup
     const bassDrum = new Tone.MembraneSynth().toMaster();
     this.bassSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         bassDrum.triggerAttackRelease(note, '8n', time);
       },
       [null, null, null, null, null, null, null, null],
@@ -2990,7 +3009,7 @@ class DrumMachine extends LitElement {
     gain.chain(Tone.Master);
 
     this.snareSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         snare.triggerAttackRelease(note, time);
         tom.triggerAttackRelease(time);
       },
@@ -3008,7 +3027,7 @@ class DrumMachine extends LitElement {
     hiHat.chain(filter, compressor, Tone.Master);
 
     this.hiHatSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         hiHat.triggerAttackRelease(note, time);
       },
       [null, null, null, null, null, null, null, null],
@@ -3052,10 +3071,11 @@ class DrumMachine extends LitElement {
     this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
 
     this.cleared = false;
+    this.updateArpSequence();
   }
 
   render() {
-    return html`
+    return html `
       <style>
         #${this.activeBeat} {
           background: ${this.transportBeatStyle.background};
@@ -3226,7 +3246,9 @@ class DrumMachine extends LitElement {
   handleSnareUpdate(e) {
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.snareSeq.at(i, { time: i });
+        this.snareSeq.at(i, {
+          time: i
+        });
       } else {
         this.snareSeq.remove(i);
       }
@@ -3236,7 +3258,9 @@ class DrumMachine extends LitElement {
   handleHiHatUpdate(e) {
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.hiHatSeq.at(i, { time: i });
+        this.hiHatSeq.at(i, {
+          time: i
+        });
       } else {
         this.hiHatSeq.remove(i);
       }

@@ -1,8 +1,13 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement,
+  html,
+  css
+} from 'lit-element';
+import colors from './colors';
 
 class OneBeat extends LitElement {
   static get styles() {
-    return css`
+    return css `
       .beat {
         width: 30px;
         height: 30px;
@@ -14,22 +19,28 @@ class OneBeat extends LitElement {
 
   static get properties() {
     return {
-      clear: { type: Boolean },
-      bgColor: { type: String },
-      instrument: { type: String },
-      index: { type: Number },
-      isLit: { type: Boolean }
+      clear: {
+        type: Boolean
+      },
+      bgColor: {
+        type: String
+      },
+      instrument: {
+        type: String
+      },
+      index: {
+        type: Number
+      },
     };
   }
 
   constructor() {
     super();
-    this.bgColor = 'white';
-    this.isLit = false;
+    this.bgColor = colors.inactive;
   }
 
   render() {
-    return html`
+    return html `
       <style>
         .beat {
           background: ${this.bgColor};
@@ -42,8 +53,7 @@ class OneBeat extends LitElement {
   updated(changedProperties) {
     changedProperties.forEach((oldValue, propName) => {
       if (propName === 'clear') {
-        this.bgColor = 'white';
-        this.isLit = false;
+        this.bgColor = colors.inactive;
         this.beatUpdatedEvent();
       }
     });
@@ -55,20 +65,15 @@ class OneBeat extends LitElement {
         detail: {
           instrument: this.instrument,
           index: this.index,
-          newState: this.isLit
+          isActive: this.bgColor === colors.active
         }
       })
     );
   }
 
   handleClick() {
-    if (!this.isLit) {
-      this.isLit = true;
-      this.bgColor = 'lightBlue';
-    } else {
-      this.isLit = false;
-      this.bgColor = 'white';
-    }
+    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    this.bgColor = newColor;
     this.beatUpdatedEvent();
   }
 }

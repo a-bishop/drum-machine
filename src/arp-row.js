@@ -1,11 +1,19 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement,
+  html,
+  css
+} from 'lit-element';
 import './select-menu.js';
 import './one-note.js';
-import { notes, arpTonics } from './notes.js';
+import {
+  notes,
+  arpTonics
+} from './notes.js';
+import colors from './colors';
 
 class ArpRow extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host([hidden]) {
         display: none;
       }
@@ -24,10 +32,18 @@ class ArpRow extends LitElement {
 
   static get properties() {
     return {
-      cells: { type: Array },
-      noteIndexes: { type: Array },
-      clearAll: { type: Boolean },
-      activeNote: { type: Number }
+      cells: {
+        type: Array
+      },
+      noteIndexes: {
+        type: Array
+      },
+      clearAll: {
+        type: Boolean
+      },
+      activeNote: {
+        type: Number
+      }
     };
   }
 
@@ -37,7 +53,7 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === 'lightBlue' ? e.detail.index : null;
+    this.activeNote = e.detail.bgColor === colors.active ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
@@ -59,12 +75,12 @@ class ArpRow extends LitElement {
   }
 
   render() {
-    return html`
+    return html `
       <div class="rowContainer">
         <div class="arpRow">
           ${this.noteIndexes.map(noteIndex => {
             const bgColor =
-              this.activeNote === noteIndex ? 'lightBlue' : 'white';
+              this.activeNote === noteIndex ? colors.active : colors.inactive;
             return html`
               <one-note
                 @note-changed=${this.updateActiveNote}
@@ -85,7 +101,7 @@ class ArpRow extends LitElement {
       if (propName === 'clearAll' && oldValue !== undefined) {
         let notes = this.shadowRoot.querySelectorAll('.note');
         for (let note of notes) {
-          note.bgColor = 'white';
+          note.bgColor = colors.inactive;
           this.stopArpSeq();
         }
       }

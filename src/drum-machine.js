@@ -1,9 +1,16 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement,
+  html,
+  css
+} from 'lit-element';
 import './select-menu.js';
 import './mute-button.js';
 import './beat-row.js';
 import './arp-row.js';
-import { notes, arpTonics } from './notes.js';
+import {
+  notes,
+  arpTonics
+} from './notes.js';
 // 0: 'C', 1: 'C#', 2: 'D', 3: 'Eb', 4: 'E', 5: 'F',
 // 6: 'F#', 7: 'G', 8: 'Ab', 9: 'A', 10: 'Bb', 11: 'B'
 
@@ -27,7 +34,7 @@ const arpMovement = {
 
 class DrumMachine extends LitElement {
   static get styles() {
-    return css`
+    return css `
       :host {
         display: block;
       }
@@ -119,8 +126,12 @@ class DrumMachine extends LitElement {
 
   static get properties() {
     return {
-      activeBeat: { type: String },
-      sequences: { type: Array }
+      activeBeat: {
+        type: String
+      },
+      sequences: {
+        type: Array
+      }
     };
   }
 
@@ -131,13 +142,6 @@ class DrumMachine extends LitElement {
     this.noteIndex = arpTonics[0];
     this.note = notes[this.noteIndex];
     this.scale = Object.keys(scales)[0];
-    this.currScaleWithOctave = scales[this.scale].map(interval => {
-      const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
-      if (interval > 11) {
-        return `${notes[newIndex]}` + (this.octave + 1);
-      }
-      return `${notes[newIndex]}${this.octave}`;
-    });
 
     this.transportBeatStyle = {
       background: 'white',
@@ -148,7 +152,7 @@ class DrumMachine extends LitElement {
     // Bass setup
     const bassDrum = new Tone.MembraneSynth().toMaster();
     this.bassSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         bassDrum.triggerAttackRelease(note, '8n', time);
       },
       [null, null, null, null, null, null, null, null],
@@ -169,7 +173,7 @@ class DrumMachine extends LitElement {
     gain.chain(Tone.Master);
 
     this.snareSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         snare.triggerAttackRelease(note, time);
         tom.triggerAttackRelease(time);
       },
@@ -187,7 +191,7 @@ class DrumMachine extends LitElement {
     hiHat.chain(filter, compressor, Tone.Master);
 
     this.hiHatSeq = new Tone.Sequence(
-      function(time, note) {
+      function (time, note) {
         hiHat.triggerAttackRelease(note, time);
       },
       [null, null, null, null, null, null, null, null],
@@ -231,10 +235,11 @@ class DrumMachine extends LitElement {
     this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
 
     this.cleared = false;
+    this.updateArpSequence();
   }
 
   render() {
-    return html`
+    return html `
       <style>
         #${this.activeBeat} {
           background: ${this.transportBeatStyle.background};
@@ -405,7 +410,9 @@ class DrumMachine extends LitElement {
   handleSnareUpdate(e) {
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.snareSeq.at(i, { time: i });
+        this.snareSeq.at(i, {
+          time: i
+        });
       } else {
         this.snareSeq.remove(i);
       }
@@ -415,7 +422,9 @@ class DrumMachine extends LitElement {
   handleHiHatUpdate(e) {
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.hiHatSeq.at(i, { time: i });
+        this.hiHatSeq.at(i, {
+          time: i
+        });
       } else {
         this.hiHatSeq.remove(i);
       }
