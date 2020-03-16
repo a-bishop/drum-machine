@@ -3000,13 +3000,8 @@ class DrumMachine extends LitElement {
       noise: {
         type: 'brown'
       }
-    });
-    const tom = new Tone.MembraneSynth();
-    const compressor = new Tone.MidSideCompressor();
-    const gain = new Tone.Gain();
-    snare.chain(compressor, gain);
-    tom.chain(compressor, gain);
-    gain.chain(Tone.Master);
+    }).toMaster();
+    const tom = new Tone.MembraneSynth().toMaster();
 
     this.snareSeq = new Tone.Sequence(
       function (time, note) {
@@ -3022,9 +3017,7 @@ class DrumMachine extends LitElement {
       noise: {
         type: 'pink'
       }
-    });
-    var filter = new Tone.Filter(800, 'bandpass');
-    hiHat.chain(filter, compressor, Tone.Master);
+    }).toMaster();
 
     this.hiHatSeq = new Tone.Sequence(
       function (time, note) {
@@ -3033,18 +3026,6 @@ class DrumMachine extends LitElement {
       [null, null, null, null, null, null, null, null],
       '8n'
     ).start();
-
-    var autoFilter = new Tone.AutoFilter({
-      frequency: '8m',
-      min: 800,
-      max: 15000
-    }).connect(Tone.Master);
-
-    //connect the noise
-    hiHat.connect(autoFilter);
-
-    //start the autofilter LFO
-    autoFilter.start();
 
     // Arpeggiator Setup
     const synth = new Tone.FMSynth({

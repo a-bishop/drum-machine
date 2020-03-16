@@ -5,7 +5,7 @@
   "main": "lit-element.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "polymer serve | npm run watch",
+    "dev": "rollup -c && polymer serve",
     "watch": "browser-sync start --proxy localhost:8081 --files \"src/**/*.*, index.html, *.js\""
   },
   "author": "",
