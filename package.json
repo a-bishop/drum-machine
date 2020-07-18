@@ -13,7 +13,7 @@
   "dependencies": {
     "browser-sync": "^2.26.7",
     "lit-element": "^2.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "normalize.css": "^8.0.1",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
