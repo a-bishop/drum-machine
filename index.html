@@ -5,11 +5,29 @@
       content="width=device-width,inital-scale=1.0, minimum-scale=1.0"
     />
     <script src="index.js"></script>
-    <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
+    <script src="https://unpkg.com/tone@14.7.9/build/Tone.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h2>Drum Machine</h2>
-    <drum-machine></drum-machine>
+    <header>
+      <h2>Drum Machine</h2>
+      <button id="startBtn">Click to start</button>
+    </header>
+    <drum-machine id="mainApp" style="display: none"></drum-machine>
   </body>
-</html>
+    <script>
+      
+      const startBtn = document.getElementById("startBtn");
+      const mainApp = document.getElementById("mainApp");
+
+      const start = () => {
+        Tone.start();
+        startBtn.remove();
+        mainApp.style.display = "block";
+      }
+
+      startBtn.addEventListener("click", () => {
+        start();
+      });
+    </script>
+  </html>

@@ -136,87 +136,83 @@ class DrumMachine extends LitElement {
   }
 
   constructor() {
-    super();
 
-    this.octave = 3;
-    this.noteIndex = arpTonics[0];
-    this.note = notes[this.noteIndex];
-    this.scale = Object.keys(scales)[0];
+      super();
+      this.octave = 3;
+      this.noteIndex = arpTonics[0];
+      this.note = notes[this.noteIndex];
+      this.scale = Object.keys(scales)[0];
 
-    this.transportBeatStyle = {
-      background: 'white',
-      visibility: 'hidden'
-    };
-    this.activeBeat = 'beatIndex0';
+      this.transportBeatStyle = {
+        background: 'white',
+        visibility: 'hidden'
+      };
+      this.activeBeat = 'beatIndex0';
 
-    // Bass setup
-    const bassDrum = new Tone.MembraneSynth().toMaster();
-    this.bassSeq = new Tone.Sequence(
-      function (time, note) {
-        bassDrum.triggerAttackRelease(note, '8n', time);
-      },
-      [null, null, null, null, null, null, null, null],
-      '8n'
-    ).start();
+      // Bass setup
+      const bassDrum = new Tone.MembraneSynth().toDestination();
+      this.bassSeq = new Tone.Sequence(
+        function (time, note) {
+          bassDrum.triggerAttackRelease(note, '8n', time);
+        },
+        Array(8).fill(null),
+        '8n'
+      ).start();
 
-    // Snare setup
-    const snare = new Tone.NoiseSynth({
-      noise: {
-        type: 'brown'
-      }
-    }).toMaster();
-    const tom = new Tone.MembraneSynth().toMaster();
+      this.bassSeq.debug = true;
 
-    this.snareSeq = new Tone.Sequence(
-      function (time, note) {
-        snare.triggerAttackRelease(note, time);
-        tom.triggerAttackRelease(time);
-      },
-      [null, null, null, null, null, null, null, null],
-      '8n'
-    ).start();
+      // Snare setup
+      const snare = new Tone.Player('./samples/snare808.mp3').toDestination();
 
-    // hiHat setup
-    const hiHat = new Tone.NoiseSynth({
-      noise: {
-        type: 'pink'
-      }
-    }).toMaster();
+      this.snareSeq = new Tone.Sequence(
+        function (time) {
+          snare.start(time);
+        },
+        Array(8).fill(null),
+        '8n'
+      ).start();
 
-    this.hiHatSeq = new Tone.Sequence(
-      function (time, note) {
-        hiHat.triggerAttackRelease(note, time);
-      },
-      [null, null, null, null, null, null, null, null],
-      '8n'
-    ).start();
+      // hiHat setup
+      const hiHat = new Tone.NoiseSynth({
+        noise: {
+          type: 'pink'
+        }
+      }).toDestination();
 
-    // Arpeggiator Setup
-    const synth = new Tone.FMSynth({
-      oscillator: {
-        type: 'triangle'
-      }
-    }).toMaster();
+      this.hiHatSeq = new Tone.Sequence(
+        function (time, note) {
+          hiHat.triggerAttackRelease(note, time);
+        },
+        Array(8).fill(null),
+        '8n'
+      ).start();
 
-    this.arpSeq = new Tone.Pattern(
-      (time, note) => {
-        synth.triggerAttackRelease(note, '32n', time);
-      },
-      this.currScaleWithOctave,
-      arpMovement.upDown
-    ).start();
-    this.arpSeq.interval = '8n';
+      // Arpeggiator Setup
+      const synth = new Tone.FMSynth({
+        oscillator: {
+          type: 'triangle'
+        }
+      }).toDestination();
 
-    var comp = new Tone.Compressor(-30, 3);
-    comp.toMaster();
-    Tone.Transport.loop = true;
-    Tone.Transport.loopStart = 0;
-    Tone.Transport.loopEnd = 2;
+      this.arpSeq = new Tone.Pattern(
+        (time, note) => {
+          synth.triggerAttackRelease(note, '32n', time);
+        },
+        this.currScaleWithOctave,
+        arpMovement.upDown
+      ).start();
+      this.arpSeq.interval = '8n';
 
-    this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
+      var comp = new Tone.Compressor(-30, 3);
+      comp.toDestination();
+      Tone.Transport.loop = true;
+      Tone.Transport.loopStart = 0;
+      Tone.Transport.loopEnd = 2;
 
-    this.cleared = false;
-    this.updateArpSequence();
+      this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
+
+      this.cleared = false;
+      this.updateArpSequence();
   }
 
   render() {
@@ -379,37 +375,39 @@ class DrumMachine extends LitElement {
   }
 
   handleBassUpdate(e) {
+    let events = Array(e.detail.notes.length).fill(null);   
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.bassSeq.at(i, 'C2');
+        events[i] = "C2";
       } else {
-        this.bassSeq.remove(i);
+        events[i] = null;
       }
     }
+    this.bassSeq.set({events});
   }
 
   handleSnareUpdate(e) {
+    let events = Array(e.detail.notes.length).fill(null);  
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.snareSeq.at(i, {
-          time: i
-        });
+        events[i] = true;
       } else {
-        this.snareSeq.remove(i);
+        events[i] = null;
       }
     }
+    this.snareSeq.set({events});
   }
 
   handleHiHatUpdate(e) {
+    let events = Array(e.detail.notes.length).fill(null);  
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        this.hiHatSeq.at(i, {
-          time: i
-        });
+        events[i] = true;
       } else {
-        this.hiHatSeq.remove(i);
+        events[i] = null;
       }
     }
+    this.hiHatSeq.set({events});
   }
 
   updateArpSequence() {
