@@ -4,9 +4,9 @@
   "description": "",
   "main": "lit-element.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rollup -c && polymer serve",
-    "watch": "browser-sync start --files \"src/**/*.*, index.html, *.js\""
+    "test": "polymer test",
+    "watch": "browser-sync start --proxy localhost:8080 --startPath 'src/index.js' --files 'src/*.js' "
   },
   "author": "",
   "license": "ISC",

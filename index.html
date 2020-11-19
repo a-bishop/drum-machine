@@ -10,10 +10,17 @@
   </head>
   <body>
     <header>
-      <h2>Drum Machine</h2>
-      <button id="startBtn" style="padding: 5px; font: 'arcade'; font-family: 'arcade';">Click to start</button>
+      <h2 id="title">Drum Machine</h2>
+      <div style="text-align:center; margin:auto;">
+        <button id="startBtn" style="padding: 5px; font: 'arcade'; font-family: 'arcade';">Click to start</button>
+      </div>
+      <template id="mainApp">
+        <drum-machine></drum-machine>
+      </template>
     </header>
-    <drum-machine id="mainApp" style="display: none"></drum-machine>
+    <script id="__bs_script__">//<![CDATA[
+      document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.13'><\/script>".replace("HOST", location.hostname));
+  //]]></script>
   </body>
     <script>
       
@@ -21,13 +28,16 @@
       const mainApp = document.getElementById("mainApp");
 
       const start = () => {
-        Tone.start();
+        // Tone.start();
+        // Tone.context.resume();
         startBtn.remove();
-        mainApp.style.display = "block";
+        const app = document.getElementById('mainApp');
+        let appContent = app.content;
+        document.body.appendChild(appContent);
       }
 
-      startBtn.addEventListener("click", () => {
+      ['click', 'touchend', 'keydown'].forEach(event => startBtn.addEventListener(event, () => {
         start();
-      });
+      }));
     </script>
   </html>
