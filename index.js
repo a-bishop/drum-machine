@@ -2504,10 +2504,11 @@ customElements.define('mute-button', MuteButton);
 
 class OneBeat extends LitElement {
   static get styles() {
-    return css `
+    return css`
       .beat {
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
+        margin: 0 2px 0 2px;
         border: 1px solid black;
         cursor: pointer;
       }
@@ -2517,16 +2518,16 @@ class OneBeat extends LitElement {
   static get properties() {
     return {
       clear: {
-        type: Boolean
+        type: Boolean,
       },
       bgColor: {
-        type: String
+        type: String,
       },
       instrument: {
-        type: String
+        type: String,
       },
       index: {
-        type: Number
+        type: Number,
       },
     };
   }
@@ -2537,7 +2538,7 @@ class OneBeat extends LitElement {
   }
 
   render() {
-    return html `
+    return html`
       <style>
         .beat {
           background: ${this.bgColor};
@@ -2562,14 +2563,15 @@ class OneBeat extends LitElement {
         detail: {
           instrument: this.instrument,
           index: this.index,
-          isActive: this.bgColor === colors.active
-        }
+          isActive: this.bgColor === colors.active,
+        },
       })
     );
   }
 
   handleClick() {
-    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    const newColor =
+      this.bgColor === colors.active ? colors.inactive : colors.active;
     this.bgColor = newColor;
     this.beatUpdatedEvent();
   }
@@ -2579,7 +2581,7 @@ customElements.define('one-beat', OneBeat);
 
 class BeatRow extends LitElement {
   static get styles() {
-    return css `
+    return css`
       :host([hidden]) {
         display: none;
       }
@@ -2587,7 +2589,7 @@ class BeatRow extends LitElement {
         display: block;
       }
       .rowContainer {
-        width: 300px;
+        width: 220px;
       }
       .beatRow {
         display: flex;
@@ -2599,17 +2601,17 @@ class BeatRow extends LitElement {
   static get properties() {
     return {
       clearAll: {
-        type: Boolean
+        type: Boolean,
       },
       cells: {
-        type: Array
+        type: Array,
       },
       instrument: {
-        type: String
+        type: String,
       },
       notes: {
-        type: Array
-      }
+        type: Array,
+      },
     };
   }
 
@@ -2620,20 +2622,20 @@ class BeatRow extends LitElement {
   }
 
   render() {
-    return html `
+    return html`
       <div class="rowContainer">
         <div class="beatRow">
           ${this.cells.map(
             (item, index) =>
               html`
                 <one-beat
-                  @beat-updated="${e => {
+                  @beat-updated="${(e) => {
                     this.notes.splice(e.detail.index, 1, e.detail.isActive);
                     let event = new CustomEvent('beat-row-updated', {
                       detail: {
                         instrument: this.instrument,
-                        notes: this.notes
-                      }
+                        notes: this.notes,
+                      },
                     });
                     this.dispatchEvent(event);
                   }}"
@@ -2665,7 +2667,7 @@ customElements.define('beat-row', BeatRow);
 
 class OneNote extends LitElement {
   static get styles() {
-    return css `
+    return css`
       .note {
         width: 30px;
         height: 30px;
@@ -2681,14 +2683,14 @@ class OneNote extends LitElement {
   static get properties() {
     return {
       clear: {
-        type: Boolean
+        type: Boolean,
       },
       bgColor: {
-        type: String
+        type: String,
       },
       index: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -2697,7 +2699,7 @@ class OneNote extends LitElement {
   }
 
   render() {
-    return html `
+    return html`
       <style>
         .note {
           background: ${this.bgColor};
@@ -2714,14 +2716,15 @@ class OneNote extends LitElement {
       new CustomEvent('note-changed', {
         detail: {
           index: this.index,
-          bgColor: this.bgColor
-        }
+          bgColor: this.bgColor,
+        },
       })
     );
   }
 
   handleClick() {
-    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    const newColor =
+      this.bgColor === colors.active ? colors.inactive : colors.active;
     this.bgColor = newColor;
     this.beatUpdatedEvent();
   }
@@ -2749,7 +2752,7 @@ const arpTonics = [7, 2, 9, 4];
 
 class ArpRow extends LitElement {
   static get styles() {
-    return css `
+    return css`
       :host([hidden]) {
         display: none;
       }
@@ -2757,7 +2760,7 @@ class ArpRow extends LitElement {
         display: block;
       }
       .rowContainer {
-        width: 300px;
+        width: 220px;
       }
       .arpRow {
         display: flex;
@@ -2769,17 +2772,17 @@ class ArpRow extends LitElement {
   static get properties() {
     return {
       cells: {
-        type: Array
+        type: Array,
       },
       noteIndexes: {
-        type: Array
+        type: Array,
       },
       clearAll: {
-        type: Boolean
+        type: Boolean,
       },
       activeNote: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -2789,12 +2792,13 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === colors.active ? e.detail.index : null;
+    this.activeNote =
+      e.detail.bgColor === colors.active ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
-          noteIndex: e.detail.index
-        }
+          noteIndex: e.detail.index,
+        },
       });
       this.dispatchEvent(event);
     }
@@ -2804,17 +2808,17 @@ class ArpRow extends LitElement {
   stopArpSeq() {
     let event = new CustomEvent('arp-row-updated', {
       detail: {
-        stopArpSeq: true
-      }
+        stopArpSeq: true,
+      },
     });
     this.dispatchEvent(event);
   }
 
   render() {
-    return html `
+    return html`
       <div class="rowContainer">
         <div class="arpRow">
-          ${this.noteIndexes.map(noteIndex => {
+          ${this.noteIndexes.map((noteIndex) => {
             const bgColor =
               this.activeNote === noteIndex ? colors.active : colors.inactive;
             return html`
@@ -2856,7 +2860,7 @@ const scales = {
   'harmonic minor': [0, 2, 3, 5, 7, 8, 11],
   blues: [0, 3, 5, 6, 7, 10],
   arabic: [0, 1, 4, 5, 7, 8, 11],
-  'hungarian roma': [0, 2, 3, 6, 7, 8, 11]
+  'hungarian roma': [0, 2, 3, 6, 7, 8, 11],
 };
 
 const arpMovement = {
@@ -2865,12 +2869,12 @@ const arpMovement = {
   alternateUp: 'alternateUp',
   alternateDown: 'alternateDown',
   randomWalk: 'randomWalk',
-  random: 'random'
+  random: 'random',
 };
 
 class DrumMachine extends LitElement {
   static get styles() {
-    return css `
+    return css`
       :host {
         display: block;
       }
@@ -2885,8 +2889,8 @@ class DrumMachine extends LitElement {
       button {
         font-family: 'arcade';
         font-size: 16px;
-        padding: 10px;
-        margin: 10px;
+        padding: 5px;
+        margin: 5px;
         border-radius: 4px;
         background-color: lightGray;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
@@ -2899,13 +2903,20 @@ class DrumMachine extends LitElement {
           0 3px 10px 0 rgba(0, 0, 0, 0.2);
       }
 
+      .mainContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
       .text {
         font-size: 16px;
       }
 
       .mainGrid {
         display: grid;
-        grid-template-columns: 110px 50px 300px;
+        grid-template-columns: 60px 250px;
         grid-row-gap: 5px;
       }
 
@@ -2919,6 +2930,7 @@ class DrumMachine extends LitElement {
         display: grid;
         grid-template-columns: 1fr 1fr;
         justify-items: center;
+        width: 310px;
       }
 
       .grid-row {
@@ -2930,20 +2942,21 @@ class DrumMachine extends LitElement {
       }
 
       .instrumentText {
-        justify-self: center;
+        justify-self: flex-start;
       }
 
       .buttonRow {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        margin: 5px;
+        width: 310px;
+        margin: 10px 0 10px 0;
       }
 
       .transportBeat {
-        width: 30px;
+        width: 25px;
         height: 5px;
-        margin: 7px 0;
+        margin: 0 2px 0 2px;
         border: 1px solid black;
         visibility: hidden;
       }
@@ -2963,96 +2976,95 @@ class DrumMachine extends LitElement {
   static get properties() {
     return {
       activeBeat: {
-        type: String
+        type: String,
       },
       sequences: {
-        type: Array
-      }
+        type: Array,
+      },
     };
   }
 
   constructor() {
+    super();
+    this.octave = 3;
+    this.noteIndex = arpTonics[0];
+    this.note = notes[this.noteIndex];
+    this.scale = Object.keys(scales)[0];
 
-      super();
-      this.octave = 3;
-      this.noteIndex = arpTonics[0];
-      this.note = notes[this.noteIndex];
-      this.scale = Object.keys(scales)[0];
+    this.transportBeatStyle = {
+      background: 'white',
+      visibility: 'hidden',
+    };
+    this.activeBeat = 'beatIndex0';
 
-      this.transportBeatStyle = {
-        background: 'white',
-        visibility: 'hidden'
-      };
-      this.activeBeat = 'beatIndex0';
+    // Bass setup
+    const bassDrum = new Tone.MembraneSynth().toDestination();
+    this.bassSeq = new Tone.Sequence(
+      function (time, note) {
+        bassDrum.triggerAttackRelease(note, '8n', time);
+      },
+      Array(8).fill(null),
+      '8n'
+    ).start();
 
-      // Bass setup
-      const bassDrum = new Tone.MembraneSynth().toDestination();
-      this.bassSeq = new Tone.Sequence(
-        function (time, note) {
-          bassDrum.triggerAttackRelease(note, '8n', time);
-        },
-        Array(8).fill(null),
-        '8n'
-      ).start();
+    this.bassSeq.debug = true;
 
-      this.bassSeq.debug = true;
+    // Snare setup
+    const snare = new Tone.Player('./samples/snare808.mp3').toDestination();
 
-      // Snare setup
-      const snare = new Tone.Player('./samples/snare808.mp3').toDestination();
+    this.snareSeq = new Tone.Sequence(
+      function (time) {
+        snare.start(time);
+      },
+      Array(8).fill(null),
+      '8n'
+    ).start();
 
-      this.snareSeq = new Tone.Sequence(
-        function (time) {
-          snare.start(time);
-        },
-        Array(8).fill(null),
-        '8n'
-      ).start();
+    // hiHat setup
+    const hiHat = new Tone.NoiseSynth({
+      noise: {
+        type: 'pink',
+      },
+    }).toDestination();
 
-      // hiHat setup
-      const hiHat = new Tone.NoiseSynth({
-        noise: {
-          type: 'pink'
-        }
-      }).toDestination();
+    this.hiHatSeq = new Tone.Sequence(
+      function (time, note) {
+        hiHat.triggerAttackRelease(note, time);
+      },
+      Array(8).fill(null),
+      '8n'
+    ).start();
 
-      this.hiHatSeq = new Tone.Sequence(
-        function (time, note) {
-          hiHat.triggerAttackRelease(note, time);
-        },
-        Array(8).fill(null),
-        '8n'
-      ).start();
+    // Arpeggiator Setup
+    const synth = new Tone.FMSynth({
+      oscillator: {
+        type: 'triangle',
+      },
+    }).toDestination();
 
-      // Arpeggiator Setup
-      const synth = new Tone.FMSynth({
-        oscillator: {
-          type: 'triangle'
-        }
-      }).toDestination();
+    this.arpSeq = new Tone.Pattern(
+      (time, note) => {
+        synth.triggerAttackRelease(note, '32n', time);
+      },
+      this.currScaleWithOctave,
+      arpMovement.upDown
+    ).start();
+    this.arpSeq.interval = '8n';
 
-      this.arpSeq = new Tone.Pattern(
-        (time, note) => {
-          synth.triggerAttackRelease(note, '32n', time);
-        },
-        this.currScaleWithOctave,
-        arpMovement.upDown
-      ).start();
-      this.arpSeq.interval = '8n';
+    var comp = new Tone.Compressor(-30, 3);
+    comp.toDestination();
+    Tone.Transport.loop = true;
+    Tone.Transport.loopStart = 0;
+    Tone.Transport.loopEnd = 2;
 
-      var comp = new Tone.Compressor(-30, 3);
-      comp.toDestination();
-      Tone.Transport.loop = true;
-      Tone.Transport.loopStart = 0;
-      Tone.Transport.loopEnd = 2;
+    this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
 
-      this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
-
-      this.cleared = false;
-      this.updateArpSequence();
+    this.cleared = false;
+    this.updateArpSequence();
   }
 
   render() {
-    return html `
+    return html`
       <style>
         #${this.activeBeat} {
           background: ${this.transportBeatStyle.background};
@@ -3061,12 +3073,7 @@ class DrumMachine extends LitElement {
       </style>
       <div class="mainContainer">
         <div class="mainGrid">
-          <p class="instrumentText">bass drum</p>
-          <mute-button
-            @toggle-row-muted="${this.handleToggleRowMuted}"
-            select="bass-drum"
-          >
-          </mute-button>
+          <p class="instrumentText">bass</p>
           <div class="row">
             <beat-row
               class="beat-row"
@@ -3076,12 +3083,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
-          <p class="instrumentText">snare drum</p>
-          <mute-button
-            @toggle-row-muted="${this.handleToggleRowMuted}"
-            select="snare-drum"
-          >
-          </mute-button>
+          <p class="instrumentText">snare</p>
           <div class="row">
             <beat-row
               class="beat-row"
@@ -3092,11 +3094,6 @@ class DrumMachine extends LitElement {
             ></beat-row>
           </div>
           <p class="instrumentText">hi-hat</p>
-          <mute-button
-            @toggle-row-muted="${this.handleToggleRowMuted}"
-            select="hi-hat"
-          >
-          </mute-button>
           <div class="row">
             <beat-row
               class="beat-row"
@@ -3106,6 +3103,7 @@ class DrumMachine extends LitElement {
               clearAll="${this.cleared}"
             ></beat-row>
           </div>
+          <div></div>
           <div></div>
           <div></div>
           <div class="row">
@@ -3120,52 +3118,47 @@ class DrumMachine extends LitElement {
           </div>
           <div></div>
           <div></div>
-          <div class="buttonRow">
-            <button id="start-button" @click="${this.startBeat}">
-              Play
-            </button>
-            <button id="stop-button" @click="${this.pauseBeat}">Pause</button>
-            <button id="cancel-button" @click="${this.stopBeat}">Stop</button>
-            <button id="clear-button" @click="${this.clear}">Clear</button>
+        </div>
+        <div class="buttonRow">
+          <button id="start-button" @click="${this.startBeat}">Play</button>
+          <button id="stop-button" @click="${this.pauseBeat}">Pause</button>
+          <button id="cancel-button" @click="${this.stopBeat}">Stop</button>
+          <button id="clear-button" @click="${this.clear}">Clear</button>
+        </div>
+
+        <div class="slide-row">
+          <div class="slideContainer">
+            <label for="bpmSlider" class="text"
+              >BPM ${Math.floor(Tone.Transport.bpm.value)}</label
+            >
+            <input
+              type="range"
+              min="60"
+              max="200"
+              value=${Math.floor(Tone.Transport.bpm.value)}
+              class="slider"
+              name="bpmSlider"
+              id="bpmSlider"
+              @change="${this.updateBPM}"
+            />
           </div>
-          <div></div>
-          <div></div>
-          <div class="slide-row">
-            <div class="slideContainer">
-              <label for="bpmSlider" class="text"
-                >BPM ${Math.floor(Tone.Transport.bpm.value)}</label
-              >
-              <input
-                type="range"
-                min="60"
-                max="200"
-                value=${Math.floor(Tone.Transport.bpm.value)}
-                class="slider"
-                name="bpmSlider"
-                id="bpmSlider"
-                @change="${this.updateBPM}"
-              />
-            </div>
-            <div class="slideContainer">
-              <label for="swingSlider">Swing</label>
-              <input
-                type="range"
-                min="0"
-                max="70"
-                value="0"
-                class="slider"
-                name="swingSlider"
-                id="swingSlider"
-                @change="${this.updateSwing}"
-              />
-            </div>
+          <div class="slideContainer">
+            <label for="swingSlider">Swing</label>
+            <input
+              type="range"
+              min="0"
+              max="70"
+              value="0"
+              class="slider"
+              name="swingSlider"
+              id="swingSlider"
+              @change="${this.updateSwing}"
+            />
           </div>
-          <p class="instrumentText">ARPEGGIATOR</p>
-          <mute-button
-            @toggle-row-muted="${this.handleToggleRowMuted}"
-            select="arpeggiator"
-          >
-          </mute-button>
+        </div>
+
+        <div class="mainGrid">
+          <p class="instrumentText">arp</p>
           <div class="row arpContainer">
             <arp-row
               class="arp-row"
@@ -3176,54 +3169,47 @@ class DrumMachine extends LitElement {
               noteIndexes="${JSON.stringify(arpTonics)}"
             ></arp-row>
           </div>
-          <div></div>
-          <div></div>
-          <div class="grid-row">
-            <div>Scale</div>
-            <div>Sequence</div>
-            <div>Octave</div>
-            <select id="arpScale" @change=${this.handleArpScaleChange}>
-              ${Object.keys(scales).map(
-                scale =>
-                  html`
-                    <option>${scale}</option>
-                  `
-              )}
-            </select>
-            <select id="arpSelect" @change=${this.handleArpMovementUpdate}>
-              ${Object.keys(arpMovement).map(
-                pattern =>
-                  html`
-                    <option>${pattern}</option>
-                  `
-              )}
-            </select>
-            <select id="arpOctave" @change=${this.handleArpOctaveChange}>
-              <option>2</option>
-              <option selected>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
+        </div>
+
+        <div class="grid-row">
+          <div>Scale</div>
+          <div>Sequence</div>
+          <div>Octave</div>
+          <select id="arpScale" @change=${this.handleArpScaleChange}>
+            ${Object.keys(scales).map(
+              (scale) => html` <option>${scale}</option> `
+            )}
+          </select>
+          <select id="arpSelect" @change=${this.handleArpMovementUpdate}>
+            ${Object.keys(arpMovement).map(
+              (pattern) => html` <option>${pattern}</option> `
+            )}
+          </select>
+          <select id="arpOctave" @change=${this.handleArpOctaveChange}>
+            <option>2</option>
+            <option selected>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
         </div>
       </div>
     `;
   }
 
   handleBassUpdate(e) {
-    let events = Array(e.detail.notes.length).fill(null);   
+    let events = Array(e.detail.notes.length).fill(null);
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
-        events[i] = "C2";
+        events[i] = 'C2';
       } else {
         events[i] = null;
       }
     }
-    this.bassSeq.set({events});
+    this.bassSeq.set({ events });
   }
 
   handleSnareUpdate(e) {
-    let events = Array(e.detail.notes.length).fill(null);  
+    let events = Array(e.detail.notes.length).fill(null);
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
         events[i] = true;
@@ -3231,11 +3217,11 @@ class DrumMachine extends LitElement {
         events[i] = null;
       }
     }
-    this.snareSeq.set({events});
+    this.snareSeq.set({ events });
   }
 
   handleHiHatUpdate(e) {
-    let events = Array(e.detail.notes.length).fill(null);  
+    let events = Array(e.detail.notes.length).fill(null);
     for (const [i, note] of e.detail.notes.entries()) {
       if (note) {
         events[i] = true;
@@ -3243,11 +3229,11 @@ class DrumMachine extends LitElement {
         events[i] = null;
       }
     }
-    this.hiHatSeq.set({events});
+    this.hiHatSeq.set({ events });
   }
 
   updateArpSequence() {
-    this.currScaleWithOctave = scales[this.scale].map(interval => {
+    this.currScaleWithOctave = scales[this.scale].map((interval) => {
       const newIndex = (this.noteIndex + interval) % Object.keys(notes).length;
       if (interval > 11) {
         return `${notes[newIndex]}` + (this.octave + 1);

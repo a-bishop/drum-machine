@@ -1,16 +1,13 @@
-import {
-  LitElement,
-  html,
-  css
-} from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import colors from './colors';
 
 class OneBeat extends LitElement {
   static get styles() {
-    return css `
+    return css`
       .beat {
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
+        margin: 0 2px 0 2px;
         border: 1px solid black;
         cursor: pointer;
       }
@@ -20,16 +17,16 @@ class OneBeat extends LitElement {
   static get properties() {
     return {
       clear: {
-        type: Boolean
+        type: Boolean,
       },
       bgColor: {
-        type: String
+        type: String,
       },
       instrument: {
-        type: String
+        type: String,
       },
       index: {
-        type: Number
+        type: Number,
       },
     };
   }
@@ -40,7 +37,7 @@ class OneBeat extends LitElement {
   }
 
   render() {
-    return html `
+    return html`
       <style>
         .beat {
           background: ${this.bgColor};
@@ -65,14 +62,15 @@ class OneBeat extends LitElement {
         detail: {
           instrument: this.instrument,
           index: this.index,
-          isActive: this.bgColor === colors.active
-        }
+          isActive: this.bgColor === colors.active,
+        },
       })
     );
   }
 
   handleClick() {
-    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    const newColor =
+      this.bgColor === colors.active ? colors.inactive : colors.active;
     this.bgColor = newColor;
     this.beatUpdatedEvent();
   }

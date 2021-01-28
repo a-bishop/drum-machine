@@ -1,14 +1,9 @@
-import {
-  LitElement,
-  html,
-  css,
-  unsafeCSS
-} from 'lit-element';
+import { LitElement, html, css, unsafeCSS } from 'lit-element';
 import colors from './colors';
 
 class OneNote extends LitElement {
   static get styles() {
-    return css `
+    return css`
       .note {
         width: 30px;
         height: 30px;
@@ -24,14 +19,14 @@ class OneNote extends LitElement {
   static get properties() {
     return {
       clear: {
-        type: Boolean
+        type: Boolean,
       },
       bgColor: {
-        type: String
+        type: String,
       },
       index: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -40,7 +35,7 @@ class OneNote extends LitElement {
   }
 
   render() {
-    return html `
+    return html`
       <style>
         .note {
           background: ${this.bgColor};
@@ -57,14 +52,15 @@ class OneNote extends LitElement {
       new CustomEvent('note-changed', {
         detail: {
           index: this.index,
-          bgColor: this.bgColor
-        }
+          bgColor: this.bgColor,
+        },
       })
     );
   }
 
   handleClick() {
-    const newColor = this.bgColor === colors.active ? colors.inactive : colors.active;
+    const newColor =
+      this.bgColor === colors.active ? colors.inactive : colors.active;
     this.bgColor = newColor;
     this.beatUpdatedEvent();
   }

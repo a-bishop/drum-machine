@@ -1,19 +1,12 @@
-import {
-  LitElement,
-  html,
-  css
-} from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import './select-menu.js';
 import './one-note.js';
-import {
-  notes,
-  arpTonics
-} from './notes.js';
+import { notes, arpTonics } from './notes.js';
 import colors from './colors';
 
 class ArpRow extends LitElement {
   static get styles() {
-    return css `
+    return css`
       :host([hidden]) {
         display: none;
       }
@@ -21,7 +14,7 @@ class ArpRow extends LitElement {
         display: block;
       }
       .rowContainer {
-        width: 300px;
+        width: 220px;
       }
       .arpRow {
         display: flex;
@@ -33,17 +26,17 @@ class ArpRow extends LitElement {
   static get properties() {
     return {
       cells: {
-        type: Array
+        type: Array,
       },
       noteIndexes: {
-        type: Array
+        type: Array,
       },
       clearAll: {
-        type: Boolean
+        type: Boolean,
       },
       activeNote: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -53,12 +46,13 @@ class ArpRow extends LitElement {
   }
 
   updateActiveNote(e) {
-    this.activeNote = e.detail.bgColor === colors.active ? e.detail.index : null;
+    this.activeNote =
+      e.detail.bgColor === colors.active ? e.detail.index : null;
     if (this.activeNote === e.detail.index) {
       let event = new CustomEvent('arp-row-updated', {
         detail: {
-          noteIndex: e.detail.index
-        }
+          noteIndex: e.detail.index,
+        },
       });
       this.dispatchEvent(event);
     }
@@ -68,17 +62,17 @@ class ArpRow extends LitElement {
   stopArpSeq() {
     let event = new CustomEvent('arp-row-updated', {
       detail: {
-        stopArpSeq: true
-      }
+        stopArpSeq: true,
+      },
     });
     this.dispatchEvent(event);
   }
 
   render() {
-    return html `
+    return html`
       <div class="rowContainer">
         <div class="arpRow">
-          ${this.noteIndexes.map(noteIndex => {
+          ${this.noteIndexes.map((noteIndex) => {
             const bgColor =
               this.activeNote === noteIndex ? colors.active : colors.inactive;
             return html`

@@ -1,43 +1,40 @@
 <html>
-  <head>
-    <meta
-      name="viewport"
-      content="width=device-width,inital-scale=1.0, minimum-scale=1.0"
-    />
-    <script src="index.js"></script>
-    <script src="https://unpkg.com/tone@14.7.9/build/Tone.js"></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <h2 id="title">Drum Machine</h2>
-      <div style="text-align:center; margin:auto;">
-        <button id="startBtn" style="padding: 5px; font: 'arcade'; font-family: 'arcade';">Click to start</button>
-      </div>
-      <template id="mainApp">
-        <drum-machine></drum-machine>
-      </template>
-    </header>
-    <script id="__bs_script__">//<![CDATA[
-      document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.13'><\/script>".replace("HOST", location.hostname));
-  //]]></script>
-  </body>
-    <script>
-      
-      const startBtn = document.getElementById("startBtn");
-      const mainApp = document.getElementById("mainApp");
 
-      const start = () => {
-        // Tone.start();
-        // Tone.context.resume();
-        startBtn.remove();
-        const app = document.getElementById('mainApp');
-        let appContent = app.content;
-        document.body.appendChild(appContent);
-      }
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+  <script src="index.js"></script>
+  <script src="https://unpkg.com/tone@14.7.9/build/Tone.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-      ['click', 'touchend', 'keydown'].forEach(event => startBtn.addEventListener(event, () => {
-        start();
-      }));
-    </script>
-  </html>
+<body>
+  <header>
+    <h2 id="title">Drum Machine</h2>
+  </header>
+  <div style="text-align:center; margin:auto;">
+    <button id="startBtn" style="padding: 5px; font: 'arcade'; font-family: 'arcade';">Click to start</button>
+  </div>
+  <template id="mainApp">
+    <drum-machine></drum-machine>
+  </template>
+</body>
+<script>
+
+  const startBtn = document.getElementById("startBtn");
+  const mainApp = document.getElementById("mainApp");
+
+  const start = () => {
+    // Tone.start();
+    // Tone.context.resume();
+    startBtn.remove();
+    const app = document.getElementById('mainApp');
+    let appContent = app.content;
+    document.body.appendChild(appContent);
+  }
+
+  ['click', 'touchend', 'keydown'].forEach(event => startBtn.addEventListener(event, () => {
+    start();
+  }));
+</script>
+
+</html>
