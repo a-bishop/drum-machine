@@ -1,13 +1,13 @@
 {
-  "name": "lit-element-tutorial",
+  "name": "drum-machine",
   "version": "1.0.0",
-  "description": "",
+  "description": "tone.js and lit element drum machine",
   "main": "lit-element.js",
   "scripts": {
     "dev": "rollup -c && polymer serve",
     "test": "polymer test"
   },
-  "author": "",
+  "author": "a-bishop@github.com",
   "license": "ISC",
   "dependencies": {
     "lit-element": "^2.2.1",

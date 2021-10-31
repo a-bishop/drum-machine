@@ -2788,7 +2788,7 @@ class ArpRow extends LitElement {
 
   constructor() {
     super();
-    this.activeNote = arpTonics[0];
+    this.activeNote = null;
   }
 
   updateActiveNote(e) {
@@ -3007,8 +3007,6 @@ class DrumMachine extends LitElement {
       '8n'
     ).start();
 
-    this.bassSeq.debug = true;
-
     // Snare setup
     const snare = new Tone.Player('./samples/snare808.mp3').toDestination();
 
@@ -3060,7 +3058,6 @@ class DrumMachine extends LitElement {
     this.sequences = [this.bassSeq, this.snareSeq, this.hiHatSeq, this.arpSeq];
 
     this.cleared = false;
-    this.updateArpSequence();
   }
 
   render() {

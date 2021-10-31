@@ -42,7 +42,7 @@ class ArpRow extends LitElement {
 
   constructor() {
     super();
-    this.activeNote = arpTonics[0];
+    this.activeNote = null;
   }
 
   updateActiveNote(e) {
